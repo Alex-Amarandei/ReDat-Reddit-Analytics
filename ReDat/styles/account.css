@@ -1,0 +1,226 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    min-height: 100vh;
+    min-width: 100vw;
+    background: linear-gradient(to bottom, #f7b69e, #0b8793, #00223e);
+    display: flex;
+    flex-direction: column;
+    color: #35201a;
+    font-family: "Oxygen", sans-serif;
+}
+
+.top-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 40px 30px;
+    height: 10vh;
+    width: 100%;
+}
+
+.top-wrapper .material-icons-outlined {
+    color: #35201a;
+    font-size: 3vw;
+    cursor: default;
+}
+
+.logo-wrapper {
+    width: 20%;
+}
+
+.logo-wrapper img {
+    cursor: pointer;
+    width: 80%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    width: 100%;
+    padding: 0 32px 40px 32px;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 90vh;
+    width: 30vw;
+    min-width: 20vmax;
+    min-height: 20vmax;
+    background-color: rgba(240, 248, 255, 0);
+    border-radius: 20px;
+    padding: 10px 30px 10px 30px;
+    box-shadow: inset 0 0 40px -20px rgb(26, 13, 9);
+    position: relative;
+    overflow-y: scroll;
+}
+
+.content-line {
+    width: 100%;
+    height: 16%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.row-information h1 {
+    width: 100%;
+    height: 15%;
+    margin: 0;
+    padding: 0;
+}
+
+.top span.material-icons-outlined {
+    font-size: 3vw;
+    cursor: pointer;
+}
+
+.top {
+    width: 100%;
+    height: 18%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3vmax;
+}
+
+.title {
+    margin: 0 0 5px 0;
+    font-weight: bold;
+    font-size: 1.1vmax;
+}
+
+.row-information {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row-information span.material-icons-outlined {
+    font-size: 2vmax;
+    cursor: pointer;
+}
+
+.row-information input {
+    background: #e9e9e8;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    text-indent: 0.5vw;
+    width: 50%;
+    height: 100%;
+    margin-right: 10px;
+    font-size: 1vmax;
+}
+
+.button {
+    position: relative;
+    border-radius: 10px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.button span.border {
+    transition: 0.5;
+    opacity: 0;
+}
+
+.button:hover span.border {
+    opacity: 1;
+}
+
+.button span.border:nth-child(1) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #0b8793);
+    animation: outline1 0.5s linear infinite;
+}
+
+@keyframes outline1 {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.button span.border:nth-child(2) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #0b8793);
+    animation: outline2 0.5s linear infinite;
+    animation-delay: 0.25s;
+}
+
+@keyframes outline2 {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+.button span.border:nth-child(3) {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to left, transparent, #0b8793);
+    animation: outline3 0.5s linear infinite;
+    animation-delay: 0.5s;
+}
+
+@keyframes outline3 {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.button span.border:nth-child(4) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to top, transparent, #0b8793);
+    animation: outline4 0.5s linear infinite;
+    animation-delay: 0.75s;
+}
+
+@keyframes outline4 {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}

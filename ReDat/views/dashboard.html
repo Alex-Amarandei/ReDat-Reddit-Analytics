@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<title>ReDat (Reddit Data Monitor)</title>
+
+<head>
+    <link rel="stylesheet" href="/styles/dashboard.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="description" content="Reddit Data Monitor">
+    <meta name="keywords" content="Reddit, Data, Statistic, Thread, Subreddit">
+    <meta name="author" content="Alex Amarandei, Ioana Pelin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <nav>
+        <ul class="navbar-wrapper">
+            <li class="logo-wrapper">
+                <img src="/images/logo.png" alt="logo" />
+            </li>
+            <li class="search-bar">
+                <form action="#">
+                    <input type="text" placeholder="Search..." name="search">
+                    <button class="search-button" type="submit">
+                        <span class="material-icons-outlined">search</span>
+                    </button>
+                </form>
+            </li>
+
+            <li class="button account-button">
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span onclick="location.href='account.html'" class="material-icons-outlined">account_circle</span>
+            </li>
+
+            <li class="button about-button">
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span onclick="location.href='about.html'" class="material-icons-outlined">help_outline</span>
+            </li>
+
+            <li class="button logout-button">
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span onclick="location.href='login.html'" class="material-icons-outlined">logout</span>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="panel left-panel">
+            <div class="sub-panel">
+                <div class="panel-header">Your Communities</div>
+                <div class="panel-content">
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitate 1</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitate 2</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitate 3</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitate 4</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitate 5</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitate 6</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitate 7</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-panel">
+                <div class="panel-header">Your Subjects</div>
+                <div class="panel-content">
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">category</span>
+                        <h1>Subiect 1</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">category</span>
+                        <h1>Subiect 2</h1>
+                    </div>
+
+                    <div onclick="addToChartData(this)" class="item">
+                        <span class="material-icons-outlined">category</span>
+                        <h1>Subiect 3</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel mid-panel">
+            <div class="toolbar-wrapper">
+                <div id="post-toolbar-left" class="toolbar-wrapper left">
+                    <input type="radio" id="allReddit" name="communities" value="all">
+                    <label for="allReddit">All Communities</label>
+
+                    <input type="radio" id="yourCommunities" name="communities" value="favorite" checked>
+                    <label for="yourCommunities">Your Communities</label>
+                </div>
+
+                <div id="stats-toolbar-left" class="toolbar-wrapper left" style="justify-content:space-between;padding-right:5px;display:none;">
+                    <div class="stat-label export-button">Export</div>
+
+                    <div class="dropdown">
+                        <div class="stat-label drop-button">X-Axis</div>
+                        <div class="dropdown-content">
+                            <div class="selection">Choice 1</div>
+                            <div class="selection">Choice 2</div>
+                            <div class="selection">Choice 3</div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div class="stat-label drop-button">Y-Axis</div>
+                        <div class="dropdown-content">
+                            <div class="selection">Choice 1</div>
+                            <div class="selection">Choice 2</div>
+                            <div class="selection">Choice 3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <span onclick="switchMode()" id="statistics-button" class="material-icons-outlined">insert_chart</span>
+                <span onclick="switchMode()" id="post-button" class="material-icons-outlined" style="display:none">article</span>
+
+                <div id="post-toolbar-right" class="toolbar-wrapper right">
+                    <input type="radio" id="newPosts" name="sortedBy" value="new" checked>
+                    <label for="newPosts">New</label>
+
+                    <input type="radio" id="popularPosts" name="sortedBy" value="popular">
+                    <label for="popularPosts">Popular</label>
+                </div>
+
+                <div id="stats-toolbar-right" class="toolbar-wrapper right" style="display:none">
+                    <input type="radio" id="bar" name="type" value="bar">
+                    <label onclick="barChartSelected()" for="bar">Bar</label>
+
+                    <input type="radio" id="column" name="type" value="column">
+                    <label onclick="columnChartSelected()" for="column">Column</label>
+
+                    <input type="radio" id="line" name="type" value="line" checked>
+                    <label onclick="lineChartSelected()" for="line">Line</label>
+                </div>
+            </div>
+
+            <div id="post-wrapper" class="post-wrapper">
+                <div onclick="expandCard(this)" class="post">
+                    <div class="post-header">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitatea 1</h1>
+                    </div>
+
+                    <h2>user1</h2>
+
+                    <h3>Title 1</h3>
+
+                    <div class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+
+                <div onclick="expandCard(this)" class="post">
+                    <div class="post-header">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitatea 2</h1>
+                    </div>
+
+                    <h2>user2</h2>
+
+                    <h3>Title 2</h3>
+
+                    <div class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+
+                <div onclick="expandCard(this)" class="post">
+                    <div class="post-header">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitatea 3</h1>
+                    </div>
+
+                    <h2>user3</h2>
+
+                    <h3>Title 3</h3>
+
+                    <div class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+
+                <div onclick="expandCard(this)" class="post">
+                    <div class="post-header">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitatea 4</h1>
+                    </div>
+
+                    <h2>user4</h2>
+
+                    <h3>Title 4</h3>
+
+                    <div class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+
+                <div onclick="expandCard(this)" class="post">
+                    <div class="post-header">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitatea 5</h1>
+                    </div>
+
+                    <h2>user5</h2>
+
+                    <h3>Title 5</h3>
+
+                    <div class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+
+                <div onclick="expandCard(this)" class="post">
+                    <div class="post-header">
+                        <span class="material-icons-outlined">flutter_dash</span>
+                        <h1>Comunitatea 6</h1>
+                    </div>
+
+                    <h2>user6</h2>
+
+                    <h3>Title 6</h3>
+
+                    <div class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+            </div>
+
+            <div id="stats-wrapper" class="post-wrapper" style="display:none;">
+                <div id="line-chart" class="post stats">
+                    <img src="/images/line-chart.png" alt="Line Chart">
+                </div>
+
+                <div id="bar-chart" class="post stats" style="display:none;">
+                    <img src="/images/bar-chart.png" alt="Line Chart">
+                </div>
+
+                <div id="column-chart" class="post stats" style="display:none;">
+                    <img src="/images/column-chart.png" alt="Line Chart">
+                </div>
+            </div>
+        </div>
+
+        <div class="panel right-panel">
+            <div class="panel-header">Notifications</div>
+            <div class="panel-content">
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 1</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 2</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 3</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 4</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 5</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 6</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 7</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 8</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+                <div onclick="expandCard(this)" class="notification-wrapper">
+                    <div class="notification">
+                        <div class="notification-title">Comunitatea 9</div>
+                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
+                    </div>
+                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="/controllers/dasboard.js"></script>
+</body>
+
+</html>

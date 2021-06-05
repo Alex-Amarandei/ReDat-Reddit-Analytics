@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<title>ReDat (Reddit Data Monitor)</title>
+
+<head>
+    <link rel="stylesheet" href="../styles/login.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="description" content="Reddit Data Monitor">
+    <meta name="keywords" content="Reddit, Data, Statistic, Thread, Subreddit">
+    <meta name="author" content="Alex Amarandei, Ioana Pelin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../controllers/login.js"></script>
+</head>
+
+<body>
+    <div class="circle" id="circle-shape"></div>
+
+    <div class="content-wrapper login-mode" id="content">
+        <div class="message-wrapper">
+            <div class="message-wrapper left" id="signup-text">
+                <h1>New around here?</h1>
+                <p>Sign up and gain access to new insights on your favorite Reddit communities.</p>
+                <button onclick="return changeToSignup()" class="button transparent" id="signup-button">Sign Up</button>
+            </div>
+
+            <div class="message-wrapper right signup-page" id="login-text">
+                <h1>Already a ReDatter?</h1>
+                <p>Log in to your account and get up to date with your favorite Reddit communities.</p>
+                <button onclick="changeToLogin()" class="button transparent" id="login-button">Log In</button>
+            </div>
+        </div>
+
+        <div class="form-wrapper">
+            <div class="form-wrapper left signup-page" id="signup-form">
+                <form name="signup-form" onsubmit="return false">
+                    <h1>Sign Up</h1>
+
+                    <div class="name-wrapper">
+                        <input type="text" placeholder="First Name" name="first-name" required/>
+                        <input type="text" placeholder="Last Name" name="last-name" required/>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">email</span>
+                        <input type="email" placeholder="Email" required name="email" />
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">account_circle</span>
+                        <input type="username" placeholder="Username" name="user-name" required/>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input type="password" placeholder="Password" name="password" required/>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input type="password" placeholder="Confirm Password" name="confirm" required/>
+                    </div>
+
+                    <button onclick="return isValidRegister()" class="button solid">Sign Up</button>
+                </form>
+            </div>
+
+            <div class="form-wrapper right" id="login-form">
+                <form onsubmit="return false" name="login-form">
+                    <h1>Log In</h1>
+
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">account_circle</span>
+                        <input type="username" placeholder="Username" name="user" required/>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <span class="material-icons-outlined">lock</span>
+                        <input type="password" name="login-password" placeholder="Password" required/>
+                    </div>
+
+                    <button class="button solid" onclick="return isValidLogin()">Log In</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="logo-wrapper">
+            <img src="logo.png" alt="ReDat Logo" class="logo-left" id="login-logo">
+            <img src="logo.png" alt="ReDat Logo" class="logo-right signup-page" id="signup-logo">
+        </div>
+    </div>
+
+    <script src="localhost:5050/src/controllers/login.js" type="text/javscript">
+    </script>
+</body>
+
+</html>

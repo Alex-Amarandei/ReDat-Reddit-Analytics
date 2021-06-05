@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<title>ReDat (Reddit Data Monitor)</title>
+
+<head>
+    <link rel="stylesheet" href="account.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <meta charset="UTF-8">
+    <meta name="description" content="Reddit Data Monitor">
+    <meta name="keywords" content="Reddit, Data, Statistic, Thread, Subreddit">
+    <meta name="author" content="Alex Amarandei, Ioana Pelin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+    <nav>
+        <div class="top-wrapper">
+            <div class="logo-wrapper">
+                <img src="logo.png" alt="logo" onclick="location.href='dashboard.html'" />
+            </div>
+
+            <div class="button logout-button">
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span class="border"></span>
+                <span onclick="location.href='login.html'" class="material-icons-outlined">logout</span>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <main>
+        <div class="content-wrapper">
+            <div class="top">
+                <h1>My Account</h1>
+                <span class="material-icons-outlined" onclick="deleteAccount()">delete</span>
+            </div>
+
+            <div class="content-line">
+                <p class="title">First Name</p>
+                <div class="row-information">
+                    <input id="first-name" type="text" disabled value="Ioana">
+                    <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
+                    <span class="material-icons-outlined" onclick="enable(this)">edit</span>
+                </div>
+            </div>
+
+            <div class="content-line">
+                <p class="title">Last Name</p>
+                <div class="row-information">
+                    <input id="last-name" type="text" disabled value="Pelin">
+                    <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
+                    <span class="material-icons-outlined" onclick="enable(this)">edit</span>
+                </div>
+            </div>
+
+            <div class="content-line">
+                <p class="title">Username</p>
+                <div class="row-information">
+                    <input id="user-name" type="username" disabled value="ioanapelin">
+                    <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
+                    <span class="material-icons-outlined" onclick="enable(this)">edit</span>
+                </div>
+            </div>
+
+            <div class="content-line">
+                <p class="title">Email</p>
+                <div class="row-information">
+                    <input id="email" type="email" disabled value="ioanapelin0@gmail.com">
+                    <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
+                    <span class="material-icons-outlined" onclick="enable(this)">edit</span>
+                </div>
+            </div>
+
+            <div class="content-line">
+                <p class="title">Password</p>
+                <div class="row-information">
+                    <input id="password" type="password" disabled placeholder="Old Password" value="" id="password">
+                    <input id="confirm" type="password" disabled placeholder="New Password" value="">
+                    <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
+                    <span class="material-icons-outlined" onclick="enable(this)">edit</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="account.js"></script>
+</body>

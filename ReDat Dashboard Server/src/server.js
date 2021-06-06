@@ -1,6 +1,8 @@
 const http = require('http')
+var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const qs = require('querystring')
 const url = require('url')
+const Communities = require('./src/communities.repo');
 
 const port = 3031;
 
@@ -24,17 +26,50 @@ const server = http.createServer((req, res) => {
     }
 })
 
+/////////// TEST FUNCTION CALL ONLY WITH AWAIT (ASYNC)
 
 
 // GET
-function handleGetReq(req, res) {
-    const { pathname } = url.parse(req.url)
-    console.log(pathname);
-    if (pathname !== '/das') {
+async function handleGetReq(req, res) {
+    const { pathname, query } = url.parse(req.url)
+
+    if (pathname !== '/communities') {
         return handleError(res, 404)
     }
-    console.log(res);
-    return res.end('USERS');
+
+    const { id, redditToken, filterType } = qs.parse(query);
+    const userId = id.split('_')[0];
+
+
+    try {
+        var posts = [];
+        var responsePosts = [];
+        const localDbCommunities = await Communities.getCommunitiesByUser(userId);
+
+
+        for (i = 0; i < localDbCommunities.length; i++) {
+            const getCommunitiesRes = await Communities.getCommunityPosts(filterType, redditToken, localDbCommunities[i].community_name);
+            posts = posts.concat(getCommunitiesRes);
+        }
+
+
+
+        posts.forEach(post => {
+            responsePosts = responsePosts.concat({ community: post.data.subreddit, author: post.data.author, title: post.data.title, content: post.data.selftext, createdAt: post.data.created_utc, score: post.data.score })
+        })
+
+
+        res.write(JSON.stringify(responsePosts));
+        res.statusCode = 200;
+        return res.end();
+    } catch (err) {
+
+        console.log(err);
+    }
+
+
+
+
 }
 
 // POST

@@ -2,6 +2,13 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -438,7 +445,7 @@ main {
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.3);
     box-shadow: #00223e 2px 8px 10px -2px;
-    height: 20%;
+    height: 30%;
     width: 100%;
     margin-bottom: 20px;
     padding: 0 10px;
@@ -488,16 +495,20 @@ main {
     align-content: center;
     padding: 10px 10px;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: hidden;
     text-overflow: ellipsis;
     margin-bottom: 10px;
     font-size: 1vmax;
 }
 
+.post-content::-webkit-scrollbar {
+    display: none;
+}
+
 .expand-card {
-    height: max-content;
-    text-overflow: unset;
+    text-overflow: ellipsis;
     white-space: normal;
+    height: fit-content;
 }
 
 .stat-label {

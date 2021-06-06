@@ -81,6 +81,8 @@ async function isValidLogin() {
                 // set local storage
                 localStorage.setItem('token', res.token);
                 localStorage.setItem('redditToken', res.redditToken);
+                localStorage.setItem('communities', 'all');
+                localStorage.setItem('filter', 'new');
 
                 // RERUTARE in alta parte
                 var str = window.location.href;

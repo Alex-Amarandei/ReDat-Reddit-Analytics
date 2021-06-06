@@ -3,7 +3,7 @@ const qs = require('querystring')
 const url = require('url')
 const uuid = require('uuid');
 
-const Users = require('./users');
+const Users = require('./src/users');
 
 const port = 3030;
 

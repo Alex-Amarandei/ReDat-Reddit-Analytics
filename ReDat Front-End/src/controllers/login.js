@@ -1,3 +1,9 @@
+(() => {
+    localStorage.clear();
+})()
+
+
+
 function changeToSignup() {
     const circle = document.getElementById("circle-shape");
     const signupText = document.getElementById("signup-text");
@@ -83,18 +89,31 @@ async function isValidLogin() {
                 localStorage.setItem('redditToken', res.redditToken);
                 localStorage.setItem('communities', 'all');
                 localStorage.setItem('filter', 'new');
+                localStorage.setItem('pageAction', 'explore');
+                var communitiesToShow = [];
+                localStorage.setItem('communitiesToShow', JSON.stringify(communitiesToShow));
+                var subjectsToShow = [];
+                localStorage.setItem('subjectsToShow', JSON.stringify(subjectsToShow));
 
                 // RERUTARE in alta parte
-                var str = window.location.href;
-                var lastIndex = str.lastIndexOf("/");
-                var path = str.substring(0, lastIndex);
-                var new_path = path + "/dashboard.html";
-                window.location.assign(new_path);
+                console.log(res);
 
-
+                if (!res.isAdmin) {
+                    localStorage.setItem('isAdmin', false)
+                    var str = window.location.href;
+                    var lastIndex = str.lastIndexOf("/");
+                    var path = str.substring(0, lastIndex);
+                    var new_path = path + "/dashboard.html";
+                    window.location.assign(new_path);
+                } else {
+                    localStorage.setItem('isAdmin', true)
+                    var str = window.location.href;
+                    var lastIndex = str.lastIndexOf("/");
+                    var path = str.substring(0, lastIndex);
+                    var new_path = path + "/admin.html";
+                    window.location.assign(new_path);
+                }
             }
-            console.log(xmlhttp.responseText);
-            // console.log('success', JSON.parse(xmlhttp.responseText));
         } else {
             // What to do when the request has failed
             console.log('error', xmlhttp);
@@ -112,51 +131,57 @@ async function isValidRegister() {
     const password = document.forms["signup-form"]["password"];
     const confirm = document.forms["signup-form"]["confirm"];
     const email = document.forms["signup-form"]["email"];
-
+    let isValid = true;
     if (/[^a-zA-Z]/.test(firstName.value) || /[^a-zA-Z]/.test(lastName.value)) {
         alert("Names should only contain letters.");
-        return false;
+        isValid = false;
     }
 
     if (/[^a-zA-Z0-9-_]/.test(userName.value)) {
         alert(
             "Your username should only contain alphanumerical or line characters."
         );
-        return false;
+        isValid = false;
     }
 
     if (userName.value.length < 4) {
         alert("Your username should be at least 4 characters long.");
-        return false;
+        isValid = false;
     }
 
     if (password.value.length < 4) {
         alert("Your password should be at least 4 characters long.");
-        return false;
+        isValid = false;
     }
 
     if (!/[a-z]/.test(password.value)) {
         alert("Your password should contain at least one lowercase letter.");
-        return false;
+        isValid = false;
     }
 
     if (!/[A-Z]/.test(password.value)) {
         alert("Your password should contain at least one uppercase letter.");
-        return false;
+        isValid = false;
     }
 
     if (!/[0-9]/.test(password.value)) {
         alert("Your password should contain at least one number.");
-        return false;
+        isValid = false;
     }
 
     if (!/[!@#$%^&*]/.test(password.value)) {
         alert("Your password should contain at least one special character.");
+        isValid = false;
     }
 
     if (password.value != confirm.value) {
         alert("The passwords do not match.");
-        return false;
+        isValid = false;
+    }
+
+
+    if (!isValid) {
+        return;
     }
 
     var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
@@ -180,9 +205,14 @@ async function isValidRegister() {
             if (xmlhttp.responseText) {
                 // parse res body
                 const res = JSON.parse(xmlhttp.response);
+                if (!!res.registerMessage.length) {
+                    alert('Your account was succesfully created!')
+                    setTimeout(() => {
+                        document.getElementById('login-button').click();
+                    }, 1000)
+                }
 
             }
-            console.log(xmlhttp.responseText);
             // console.log('success', JSON.parse(xmlhttp.responseText));
         } else {
             // What to do when the request has failed

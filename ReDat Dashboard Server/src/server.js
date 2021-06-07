@@ -2,7 +2,7 @@ const http = require('http')
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const qs = require('querystring')
 const url = require('url')
-const Communities = require('./src/communities.repo');
+const RedditData = require('./src/redditData.repo');
 
 const port = 3031;
 
@@ -33,38 +33,77 @@ const server = http.createServer((req, res) => {
 async function handleGetReq(req, res) {
     const { pathname, query } = url.parse(req.url)
 
-    if (pathname !== '/communities') {
+    if (pathname !== '/all/your/communities' && pathname !== '/my-communities' && pathname !== '/selected/your/communities' && pathname !== '/selected/your/subjects') {
         return handleError(res, 404)
     }
 
-    const { id, redditToken, filterType } = qs.parse(query);
+    let { id, redditToken, filterType, toShow } = qs.parse(query);
     const userId = id.split('_')[0];
+
+    if (!id) {
+        throw { statusCode: 404, message: 'User not found!' }
+    }
 
 
     try {
+
         var posts = [];
         var responsePosts = [];
-        const localDbCommunities = await Communities.getCommunitiesByUser(userId);
+        const localDbCommunities = await RedditData.getCommunitiesByUser(userId);
 
+        switch (pathname) {
+            case '/my-communities':
+                res.write(JSON.stringify(localDbCommunities));
+                break;
+            case '/all/your/communities':
+                if (!redditToken || !filterType || !id) {
+                    throw { statusCode: 400, message: 'Invalid request' }
+                }
+                for (i = 0; i < localDbCommunities.length; i++) {
+                    const getCommunitiesRes = await RedditData.getCommunityPosts(filterType, redditToken, localDbCommunities[i].community_name);
+                    posts = posts.concat(getCommunitiesRes);
+                }
+                break;
+            case '/selected/your/communities':
+                if (!redditToken || !filterType || !id || !toShow) {
+                    throw { statusCode: 400, message: 'Invalid request' }
+                }
+                var communitiesToShow = toShow.replace(/[\[\]\"]/g, "");
+                communitiesToShow = communitiesToShow.split(",");
+                for (i = 0; i < communitiesToShow.length; i++) {
+                    const getCommunitiesRes = await RedditData.getCommunityPosts(filterType, redditToken, communitiesToShow[i]);
+                    posts = posts.concat(getCommunitiesRes);
+                }
+                break;
+            case '/selected/your/subjects':
+                if (!redditToken || !filterType || !id || !toShow) {
+                    throw { statusCode: 400, message: 'Invalid request' }
+                }
+                var subjectsToShow = toShow.replace(/[\[\]\"]/g, "");
+                subjectsToShow = subjectsToShow.split(",");
+                for (i = 0; i < subjectsToShow.length; i++) {
+                    const getSubjectsRes = await RedditData.getSubjectPosts(filterType, redditToken, subjectsToShow[i]);
+                    posts = posts.concat(getSubjectsRes);
+                }
+                break;
 
-        for (i = 0; i < localDbCommunities.length; i++) {
-            const getCommunitiesRes = await Communities.getCommunityPosts(filterType, redditToken, localDbCommunities[i].community_name);
-            posts = posts.concat(getCommunitiesRes);
         }
 
-
-
-        posts.forEach(post => {
-            responsePosts = responsePosts.concat({ community: post.data.subreddit, author: post.data.author, title: post.data.title, content: post.data.selftext, createdAt: post.data.created_utc, score: post.data.score })
-        })
-
-
-        res.write(JSON.stringify(responsePosts));
+        if (pathname !== "/my-communities") {
+            if (posts && posts.length) {
+                posts.forEach(post => {
+                    responsePosts = responsePosts.concat({ community: post.data.subreddit, author: post.data.author, title: post.data.title, content: post.data.selftext, createdAt: post.data.created_utc, score: post.data.score })
+                })
+            }
+            res.write(JSON.stringify(responsePosts));
+        }
         res.statusCode = 200;
         return res.end();
-    } catch (err) {
 
-        console.log(err);
+    } catch (err) {
+        res.statusCode = err.statusCode;
+        res.end(JSON.stringify({ message: err.message }));
+
     }
 
 

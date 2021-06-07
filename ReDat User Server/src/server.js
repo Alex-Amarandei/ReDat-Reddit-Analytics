@@ -95,20 +95,21 @@ function handlePostReq(req, res) {
                 const userId = uuid.v4();
 
                 const valuesToInsert = [
-                    [userId, data.userName, data.firstName, data.lastName, data.email, newPassword]
+                    [userId, data.userName, data.firstName, data.lastName, data.email, 0, 0, newPassword]
                 ];
 
                 const registerRes = await Users.saveUser(valuesToInsert);
                 if (registerRes) {
                     res.setHeader('Content-Type', '*/*');
                     res.statusCode = 200;
-                    res.end(JSON.stringify("User successfully created"));
+                    res.end(JSON.stringify({ registerMessage: "User successfully created" }));
                 } else {
                     throw { statusCode: 500, message: 'Unknown server error' };
                 }
 
 
             } catch (err) {
+                console.log(err);
                 res.setHeader('Content-Type', '*/*');
                 res.statusCode = err.statusCode;
                 res.end(JSON.stringify(err.message));
@@ -173,6 +174,10 @@ function handlePutReq(req, res) {
                     throw { statusCode: 404, message: 'User not found!' }
                 }
 
+                if (user.is_banned) {
+                    throw { status: 403, message: 'You are banned' }
+                }
+
                 const foundUser = user[0];
 
                 if (Users.rightShifting(foundUser.password, 5) === password) {
@@ -182,21 +187,21 @@ function handlePutReq(req, res) {
                     throw { statusCode: 403, meesage: 'Forbidden access' }
                 }
 
+
                 const response = await Users.getRedditToken();
                 const parsedRes = JSON.parse(response);
-                console.log(typeof response);
                 responseObj.redditToken = parsedRes["access_token"];
-                console.log(responseObj);
+                responseObj.isAdmin = foundUser.is_admin
+
                 res.write(JSON.stringify(responseObj));
                 res.statusCode = 200;
                 res.end();
 
 
             } catch (err) {
-                console.log(err);
                 res.setHeader('Content-Type', '*/*');
                 res.statusCode = err.statusCode;
-                res.end(JSON.stringify(err.message));
+                res.end(JSON.stringify({ errMessage: err.message }));
             }
         })
 }

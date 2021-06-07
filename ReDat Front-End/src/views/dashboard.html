@@ -61,60 +61,41 @@
         <div class="panel left-panel">
             <div class="sub-panel">
                 <div class="panel-header">Your Communities</div>
-                <div class="panel-content">
-                    <div onclick="addToChartData(this)" class="item">
-                        <span class="material-icons-outlined">flutter_dash</span>
-                        <h1>Comunitate 1</h1>
-                    </div>
-
-                    <div onclick="addToChartData(this)" class="item">
-                        <span class="material-icons-outlined">flutter_dash</span>
-                        <h1>Comunitate 2</h1>
-                    </div>
-
-                    <div onclick="addToChartData(this)" class="item">
-                        <span class="material-icons-outlined">flutter_dash</span>
-                        <h1>Comunitate 3</h1>
-                    </div>
-
-                    <div onclick="addToChartData(this)" class="item">
-                        <span class="material-icons-outlined">flutter_dash</span>
-                        <h1>Comunitate 4</h1>
-                    </div>
-
-                    <div onclick="addToChartData(this)" class="item">
-                        <span class="material-icons-outlined">flutter_dash</span>
-                        <h1>Comunitate 5</h1>
-                    </div>
-
-                    <div onclick="addToChartData(this)" class="item">
-                        <span class="material-icons-outlined">flutter_dash</span>
-                        <h1>Comunitate 6</h1>
-                    </div>
-
-                    <div onclick="addToChartData(this)" class="item">
-                        <span class="material-icons-outlined">flutter_dash</span>
-                        <h1>Comunitate 7</h1>
-                    </div>
+                <div class="panel-content" id="communities-list">
                 </div>
             </div>
 
             <div class="sub-panel">
                 <div class="panel-header">Your Subjects</div>
-                <div class="panel-content">
-                    <div onclick="addToChartData(this)" class="item">
+                <div class="panel-content" id="subjects-list">
+                    <div class="item-subject" onclick="return showPostsBySubject(this, 'Gaming')">
                         <span class="material-icons-outlined">category</span>
-                        <h1>Subiect 1</h1>
+                        <h1>Gaming</h1>
                     </div>
 
-                    <div onclick="addToChartData(this)" class="item">
+                    <div class="item-subject" onclick="return showPostsBySubject(this,'Sports')">
                         <span class="material-icons-outlined">category</span>
-                        <h1>Subiect 2</h1>
+                        <h1>Sports</h1>
                     </div>
 
-                    <div onclick="addToChartData(this)" class="item">
+                    <div class="item-subject" onclick="return showPostsBySubject(this, 'TV')">
                         <span class="material-icons-outlined">category</span>
-                        <h1>Subiect 3</h1>
+                        <h1>TV</h1>
+                    </div>
+
+                    <div class="item-subject" onclick="return showPostsBySubject(this, 'Travel')">
+                        <span class="material-icons-outlined">category</span>
+                        <h1>Travel</h1>
+                    </div>
+
+                    <div class="item-subject" onclick="return showPostsBySubject(this, 'Fitness')">
+                        <span class="material-icons-outlined">category</span>
+                        <h1>Fitness</h1>
+                    </div>
+
+                    <div class="item-subject">
+                        <span class="material-icons-outlined" onclick="return showPostsBySubject(this, 'Fashion')">category</span>
+                        <h1>Fashion</h1>
                     </div>
                 </div>
             </div>
@@ -153,6 +134,7 @@
                 </div>
 
                 <span onclick="switchMode()" id="statistics-button" class="material-icons-outlined">insert_chart</span>
+
                 <span onclick="switchMode()" id="post-button" class="material-icons-outlined" style="display:none">article</span>
 
                 <div id="post-toolbar-right" class="toolbar-wrapper right">

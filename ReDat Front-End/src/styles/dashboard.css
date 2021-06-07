@@ -352,7 +352,8 @@ main {
     overflow-y: scroll;
 }
 
-.item {
+.item-community,
+.item-subject {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -365,19 +366,17 @@ main {
     cursor: pointer;
 }
 
-.item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.item h1 {
+.item-community h1,
+.item-subject h1 {
     font-size: 1.5vmax;
     text-indent: 25px;
     white-space: nowrap;
     text-transform: capitalize;
 }
 
-.item span {
-    font-size: 3vmax;
+.item-community span,
+.item-subject span {
+    font-size: 2vmax;
     box-shadow: -1px 0 3px #00223e, 0 1px 3px #00223e, 1px 0 3px #00223e, 0 -1px 3px #00223e;
     border-radius: 50%;
 }

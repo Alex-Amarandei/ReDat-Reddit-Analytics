@@ -49,11 +49,60 @@ async function getUserByEmail(userName) {
             if (err) {
                 reject(err);
             }
+            console.log(result)
             resolve(result);
         })
 
     })
 
+}
+
+
+async function deleteUser(userId) {
+    return new Promise((resolve, reject) => {
+        const retrieveUserSql = "DELETE FROM users WHERE id = ?";
+
+        con.query(retrieveUserSql, [userId], (err, result) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(result);
+        })
+
+    })
+
+}
+
+
+async function getUserById(userId) {
+    return new Promise((resolve, reject) => {
+        const retrieveUserSql = "SELECT * FROM users WHERE id = ?";
+
+        con.query(retrieveUserSql, [userId], (err, result) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(result);
+        })
+
+    })
+
+}
+
+
+async function editUser(userId, field, value) {
+    return new Promise((resolve, reject) => {
+        const updateUserSql = `UPDATE users SET ${field} = ? WHERE id = ?`;
+
+        con.query(updateUserSql, [value, userId], (err, result) => {
+            if (err) {
+                reject(err);
+            }
+            console.log(updateUserSql);
+            resolve(result);
+        })
+
+    })
 }
 
 async function checkIfEmailAlreadyExists(email) {
@@ -104,7 +153,10 @@ async function saveUser(data) {
 
 const Users = function() {}
 
+Users.prototype.deleteUser = deleteUser
 Users.prototype.getUserByEmail = getUserByEmail
+Users.prototype.editUser = editUser
+Users.prototype.getUserById = getUserById
 Users.prototype.saveUser = saveUser
 Users.prototype.leftShifting = leftShifting
 Users.prototype.rightShifting = rightShifting

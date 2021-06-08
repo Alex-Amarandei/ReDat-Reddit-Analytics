@@ -105,6 +105,10 @@ function showPostsByCommunity(element, communityName) {
         document.getElementById("yourCommunities").checked = false;
 
     localStorage.setItem('subjectsToShow', JSON.stringify([]));
+    const doc = document.getElementById('loader');
+    doc.style.opacity = 10;
+    doc.style.zIndex = 10;
+    document.getElementById('post-wrapper').style.opacity = -10
 
     var elements = document.getElementsByClassName('item-subject');
     for (var i = 0; i < elements.length; i++) {
@@ -188,8 +192,16 @@ function showPostsByCommunity(element, communityName) {
                         expandCard(this);
                     })
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
+                const doc = document.getElementById('loader');
+                doc.style.opacity = -10;
+                doc.style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10
+                    // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
+                const doc = document.getElementById('loader');
+                doc.style.opacity = -10;
+                doc.style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10;
                 // What to do when the request has failed
                 console.log('error', xmlhttp);
             }
@@ -206,6 +218,10 @@ function showPostsBySubject(element, subject) {
         document.getElementById("yourCommunities").checked = false;
     localStorage.setItem('communitiesToShow', JSON.stringify([]));
 
+    const doc = document.getElementById('loader');
+    doc.style.opacity = 10;
+    doc.style.zIndex = 10;
+    document.getElementById('post-wrapper').style.opacity = -10;
     var elements = document.getElementsByClassName('item-community');
     for (var i = 0; i < elements.length; i++) {
         elements[i].style.backgroundColor = "unset";
@@ -288,8 +304,16 @@ function showPostsBySubject(element, subject) {
                         expandCard(this);
                     })
                 }
+                const doc = document.getElementById('loader');
+                doc.style.opacity = -10;
+                doc.style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10;
                 // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
+                const doc = document.getElementById('loader');
+                doc.style.opacity = -10;
+                doc.style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10;
                 // What to do when the request has failed
                 console.log('error', xmlhttp);
             }
@@ -303,6 +327,10 @@ function loadPostsByFilters(selectedCommunities, filterType) {
     localStorage.setItem('communitiesToShow', JSON.stringify([]));
     localStorage.setItem('subjectsToShow', JSON.stringify([]));
 
+    const doc = document.getElementById('loader');
+    doc.style.opacity = 10;
+    doc.style.zIndex = 10;
+    document.getElementById('post-wrapper').style.opacity = -10;
 
     var elements = document.getElementsByClassName('item-subject');
     for (var i = 0; i < elements.length; i++) {
@@ -367,11 +395,17 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                                 expandCard(this);
                             })
                         }
-
+                        const doc = document.getElementById('loader');
+                        doc.style.opacity = -10;
+                        doc.style.zIndex = -10;
+                        document.getElementById('post-wrapper').style.opacity = 10;
                     }
 
                 } else {
-
+                    const doc = document.getElementById('loader');
+                    doc.style.opacity = -10;
+                    doc.style.zIndex = -10;
+                    document.getElementById('post-wrapper').style.opacity = 10;
                     console.log('error', xmlhttp);
                 }
             }
@@ -392,7 +426,7 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                     if (xmlhttp.responseText) {
                         // parse res body
                         let res = JSON.parse(xmlhttp.responseText);
-                        console.log(res);
+
 
                         if (filterType === "new")
                             res = res.sort((obj1, obj2) => obj1.createdAt < obj2.createdAt)
@@ -427,8 +461,16 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                                 expandCard(this);
                             })
                         }
+                        const doc = document.getElementById('loader');
+                        doc.style.opacity = -10;
+                        doc.style.zIndex = -10;
+                        document.getElementById('post-wrapper').style.opacity = 10;
                         // console.log('success', JSON.parse(xmlhttp.responseText));
                     } else {
+                        const doc = document.getElementById('loader');
+                        doc.style.opacity = -10;
+                        doc.style.zIndex = -10;
+                        document.getElementById('post-wrapper').style.opacity = 10;
                         // What to do when the request has failed
                         console.log('error', xmlhttp);
                     }
@@ -451,6 +493,16 @@ function logoutUser() {
 }
 
 (() => {
+
+})();
+
+
+
+window.onload = () => {
+    console.log('here')
+    console.log('are token');
+
+    ;
     const token = localStorage.getItem('token');
     console.log(token)
     if (!token) {
@@ -460,13 +512,14 @@ function logoutUser() {
         var new_path = path + "/login.html";
         window.location.assign(new_path);
     } else {
-        console.log('are token');
+
         return loadPostsByFilters(localStorage.getItem('communities'), localStorage.getItem('filter'))
     }
-})();
+}
 
 
 (() => {
+
     var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
     var theUrl = `http://localhost:3031/my-communities?id=${localStorage.getItem("token")}`;
     xmlhttp.open("GET", theUrl);
@@ -504,8 +557,14 @@ function logoutUser() {
                         return showPostsByCommunity(this, communityName);
                     })
                 }
+                document.getElementById('loader').style.opacity = -10;
+                document.getElementById('loader').style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10;
             } else {
                 // What to do when the request has failed
+                document.getElementById('loader').style.opacity = -10;
+                document.getElementById('loader').style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10;
                 console.log('error', xmlhttp);
             }
         }

@@ -25,7 +25,7 @@
                 <span class="border"></span>
                 <span class="border"></span>
                 <span class="border"></span>
-                <span onclick="location.href='login.html'" class="material-icons-outlined">logout</span>
+                <span onclick="return logoutUser()" class="material-icons-outlined">logout</span>
             </div>
         </div>
     </nav>
@@ -42,7 +42,7 @@
             <div class="content-line">
                 <p class="title">First Name</p>
                 <div class="row-information">
-                    <input id="first-name" type="text" disabled value="Ioana">
+                    <input id="first-name" type="text" disabled value="">
                     <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
                     <span class="material-icons-outlined" onclick="enable(this)">edit</span>
                 </div>
@@ -51,7 +51,7 @@
             <div class="content-line">
                 <p class="title">Last Name</p>
                 <div class="row-information">
-                    <input id="last-name" type="text" disabled value="Pelin">
+                    <input id="last-name" type="text" disabled value="">
                     <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
                     <span class="material-icons-outlined" onclick="enable(this)">edit</span>
                 </div>
@@ -60,7 +60,7 @@
             <div class="content-line">
                 <p class="title">Username</p>
                 <div class="row-information">
-                    <input id="user-name" type="username" disabled value="ioanapelin">
+                    <input id="user-name" type="username" disabled value="">
                     <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
                     <span class="material-icons-outlined" onclick="enable(this)">edit</span>
                 </div>
@@ -69,7 +69,7 @@
             <div class="content-line">
                 <p class="title">Email</p>
                 <div class="row-information">
-                    <input id="email" type="email" disabled value="ioanapelin0@gmail.com">
+                    <input id="email" type="email" disabled value="">
                     <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
                     <span class="material-icons-outlined" onclick="enable(this)">edit</span>
                 </div>
@@ -78,8 +78,8 @@
             <div class="content-line">
                 <p class="title">Password</p>
                 <div class="row-information">
-                    <input id="password" type="password" disabled placeholder="Old Password" value="" id="password">
-                    <input id="confirm" type="password" disabled placeholder="New Password" value="">
+                    <input id="old-password" type="password" disabled placeholder="Old Password" value="" id="password">
+                    <input id="new-password" type="password" disabled placeholder="New Password" value="">
                     <span class="material-icons-outlined" aria-disabled="true" style="opacity: 0; cursor: default;" onclick="disable(this)">task_alt</span>
                     <span class="material-icons-outlined" onclick="enable(this)">edit</span>
                 </div>

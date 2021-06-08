@@ -58,16 +58,20 @@
     </nav>
 
     <main>
+
+
         <div class="panel left-panel">
             <div class="sub-panel">
                 <div class="panel-header">Your Communities</div>
                 <div class="panel-content" id="communities-list">
+                    <div class="dashboard-loader" id="loader">/</div>
                 </div>
             </div>
 
             <div class="sub-panel">
                 <div class="panel-header">Your Subjects</div>
                 <div class="panel-content" id="subjects-list">
+                    <div class="dashboard-loader" id="loader">/</div>
                     <div class="item-subject" onclick="return showPostsBySubject(this, 'Gaming')">
                         <span class="material-icons-outlined">category</span>
                         <h1>Gaming</h1>
@@ -93,15 +97,18 @@
                         <h1>Fitness</h1>
                     </div>
 
-                    <div class="item-subject">
-                        <span class="material-icons-outlined" onclick="return showPostsBySubject(this, 'Fashion')">category</span>
+                    <div class="item-subject" onclick="return showPostsBySubject(this, 'Fashion')">
+                        <span class="material-icons-outlined">category</span>
                         <h1>Fashion</h1>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="dashboard-loader" id="loader"></div>
 
-        <div class="panel mid-panel">
+
+        <div class="panel mid-panel" id="mid-panel">
+
             <div class="toolbar-wrapper">
                 <div id="post-toolbar-left" class="toolbar-wrapper left">
                     <input type="radio" id="allReddit" name="communities" value="all" checked>
@@ -156,6 +163,7 @@
                     <label onclick="lineChartSelected()" for="line">Line</label>
                 </div>
             </div>
+
 
             <div id="post-wrapper" class="post-wrapper">
             </div>

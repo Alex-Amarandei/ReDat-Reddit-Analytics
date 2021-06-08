@@ -115,8 +115,18 @@ async function isValidLogin() {
                 }
             }
         } else {
-            // What to do when the request has failed
-            console.log('error', xmlhttp);
+            document.getElementById("submit-button-login").innerHTML = "Wrong email or password!";
+            setTimeout(() => {
+                document.getElementById("submit-button-login")
+                document.forms["login-form"]["user"].value = "";
+                document.forms["login-form"]["user"].placeholder = "Email";
+                document.forms["login-form"]["login-password"].value = "";
+                document.forms["login-form"]["login-password"].placeholder = "Password";
+                document.getElementById("submit-button-login").innerHTML = "Log In";
+            }, 2000);
+
+
+            console.log("eroare din login");
         }
 
     }

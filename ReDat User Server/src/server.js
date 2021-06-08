@@ -30,25 +30,63 @@ const server = http.createServer((req, res) => {
 
 
 // GET
-function handleGetReq(req, res) {
-    const { pathname } = url.parse(req.url)
-    console.log(pathname);
-    if (pathname !== '/users') {
+async function handleGetReq(req, res) {
+    const { pathname, query } = url.parse(req.url)
+
+    if (pathname !== '/my/information' && pathname !== '/verify/password') {
         return handleError(res, 404)
     }
-    console.log(res);
-    return res.end('USERS');
+    let { id, password } = qs.parse(query);
+    const userId = id.split('_')[0];
+
+    if (!id) {
+        throw { statusCode: 404, message: 'User not found!' }
+    }
+
+    try {
+        const userInformation = await Users.getUserById(userId);
+
+        switch (pathname) {
+            case '/my/information':
+                res.write(JSON.stringify({
+                    first_name: userInformation[0].first_name,
+                    last_name: userInformation[0].last_name,
+                    username: userInformation[0].username,
+                    email: userInformation[0].email,
+                }));
+                break;
+            case '/verify/password':
+                userInformation[0].password = Users.rightShifting(userInformation[0].password, 5);
+                if (userInformation[0].password === password)
+                    res.write(JSON.stringify({ message: "Same password" }));
+                else
+                    res.write(JSON.stringify({ message: "Wrong password" }));
+                break;
+            default:
+                break;
+
+        }
+
+        res.statusCode = 200;
+        return res.end();
+
+    } catch (err) {
+        res.statusCode = err.statusCode;
+        res.end(JSON.stringify({ message: err.message }));
+
+    }
 }
 
 // POST
-function handlePostReq(req, res) {
+async function handlePostReq(req, res) {
     /// REGISTER
+
     const size = parseInt(req.headers['content-length'], 10)
     const buffer = Buffer.allocUnsafe(size)
     var pos = 0
 
     const { pathname } = url.parse(req.url)
-    if (pathname !== '/user') {
+    if (pathname !== '/user' && pathname !== '/edit/user' && pathname !== '/delete/user') {
         return handleError(res, 404)
     }
 
@@ -70,41 +108,73 @@ function handlePostReq(req, res) {
             const data = JSON.parse(buffer.toString())
 
             try {
-                if (!data.userName || !data.firstName || !data.email || !data.lastName || !data.password || !data.confirm) {
-                    throw { statusCode: 400, message: 'Bad Request' }
-                }
-
-                if (data.password !== data.confirm) {
-                    throw { statusCode: 400, message: 'Bad Request' }
-                }
-
-
-
-                const checkIfUserExists = await Users.checkIfEmailAlreadyExists(data.email).then((result) => {
-                    if (result) {
-                        return result || [];
+                if (pathname === '/user') {
+                    if (!data.userName || !data.firstName || !data.email || !data.lastName || !data.password || !data.confirm) {
+                        throw { statusCode: 400, message: 'Bad Request' }
                     }
-                }).catch((err) => setImmediate(() => { throw err; }));
 
-                if (checkIfUserExists.length) {
-                    throw { statusCode: 400, message: 'Email already exists' }
-                }
+                    if (data.password !== data.confirm) {
+                        throw { statusCode: 400, message: 'Bad Request' }
+                    }
 
 
-                const newPassword = Users.leftShifting(data.password, 5);
-                const userId = uuid.v4();
 
-                const valuesToInsert = [
-                    [userId, data.userName, data.firstName, data.lastName, data.email, 0, 0, newPassword]
-                ];
+                    const checkIfUserExists = await Users.checkIfEmailAlreadyExists(data.email).then((result) => {
+                        if (result) {
+                            return result || [];
+                        }
+                    }).catch((err) => setImmediate(() => { throw err; }));
 
-                const registerRes = await Users.saveUser(valuesToInsert);
-                if (registerRes) {
-                    res.setHeader('Content-Type', '*/*');
-                    res.statusCode = 200;
-                    res.end(JSON.stringify({ registerMessage: "User successfully created" }));
-                } else {
-                    throw { statusCode: 500, message: 'Unknown server error' };
+                    if (checkIfUserExists.length) {
+                        throw { statusCode: 400, message: 'Email already exists' }
+                    }
+
+
+                    const newPassword = Users.leftShifting(data.password, 5);
+                    const userId = uuid.v4();
+
+                    const valuesToInsert = [
+                        [userId, data.userName, data.firstName, data.lastName, data.email, 0, 0, newPassword]
+                    ];
+
+                    const registerRes = await Users.saveUser(valuesToInsert);
+                    if (registerRes) {
+                        res.setHeader('Content-Type', '*/*');
+                        res.statusCode = 200;
+                        res.end(JSON.stringify({ registerMessage: "User successfully created" }));
+                    } else {
+                        throw { statusCode: 500, message: 'Internal server error' };
+                    }
+                } else
+                if (pathname === '/edit/user') {
+                    const userId = data.id.split('_')[0];
+                    if (!data.id) {
+                        throw { statusCode: 404, message: 'User not found!' }
+                    }
+                    let responseUpdate = await Users.editUser(userId, data.field, data.newValue);
+                    if (responseUpdate) {
+                        res.setHeader('Content-Type', '*/*');
+                        res.statusCode = 200;
+                        res.end(JSON.stringify({ editingMessage: "User successfully updated" }));
+                    } else {
+                        throw { statusCode: 500, message: 'Internal server error' };
+                    }
+
+
+                } else
+                if (pathname === '/delete/user') {
+                    const userId = data.id.split('_')[0];
+                    if (!data.id) {
+                        throw { statusCode: 404, message: 'User not found!' }
+                    }
+                    let responseDelete = await Users.deleteUser(userId);
+                    if (responseDelete) {
+                        res.setHeader('Content-Type', '*/*');
+                        res.statusCode = 200;
+                        res.end(JSON.stringify({ deletingMessage: "User successfully deleted" }));
+                    } else {
+                        throw { statusCode: 500, message: 'Internal server error' };
+                    }
                 }
 
 

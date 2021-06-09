@@ -20,30 +20,37 @@
                 <img src="../images/logo.png" alt="logo" />
             </li>
 
-            <li class="button logout-button">
+            <li class="button logout-button" onclick="return logoutUser()">
                 <span class="border"></span>
                 <span class="border"></span>
                 <span class="border"></span>
                 <span class="border"></span>
-                <span onclick="location.href='login.html'" class="material-icons-outlined">logout</span>
+                <span class="material-icons-outlined">logout</span>
             </li>
         </ul>
     </nav>
 
     <main>
         <h1>Accounts</h1>
-        <div class="accounts-wrapper">
+        <div class="accounts-wrapper" id="accounts-wrapper">
             <div class="account-box" onclick="changeAccountView(this)">
+
                 <div class="info-preview">
-                    <div class=" names ">
+                    <div class="names">
                         Alex Amarandei
                     </div>
                     <div class="email ">
                         alex@yahoo.com
                     </div>
                 </div>
+
+
+
                 <div class="all-info" style="display:none">
+
+
                     <div class="top">
+
                         <div class="field">
                             <div class="label">
                                 User ID:
@@ -52,25 +59,33 @@
                                 asdfghjklqwertyuiop
                             </div>
                         </div>
+
                         <div class="delete-button">
                             <span class="material-icons-outlined" onclick="event.stopPropagation(); deleteAccount(this)">delete</span>
                         </div>
+
                     </div>
+
+
                     <div class="confirmation" style="display:none">
                         <div class="question">
                             Are you sure you want to delete this account?
                         </div>
+
                         <div class="button-wrapper">
                             <div class="button-yes" onclick="event.stopPropagation(); 
                             confirmDeleteAccount(this)">
                                 Yes
                             </div>
+
                             <div class="button-no" onclick="event.stopPropagation(); 
                             infirmDeleteAccount(this)">
                                 No
                             </div>
                         </div>
                     </div>
+
+
                     <div class="field">
                         <div class="label">
                             First Name:
@@ -79,6 +94,7 @@
                             Ioana
                         </div>
                     </div>
+
                     <div class="field">
                         <div class="label">
                             Last Name:
@@ -87,6 +103,7 @@
                             Pelin
                         </div>
                     </div>
+
                     <div class="field">
                         <div class="label">
                             Username:
@@ -95,6 +112,7 @@
                             ioanapelinn
                         </div>
                     </div>
+
                     <div class="field">
                         <div class="label">
                             Email:
@@ -103,440 +121,11 @@
                             ioanapelin0@gmail.com
                         </div>
                     </div>
+
+
                 </div>
             </div>
-            <div class="account-box" onclick="changeAccountView(this)">
-                <div class="info-preview">
-                    <div class=" names ">
-                        Alex Amarandei
-                    </div>
-                    <div class="email ">
-                        alex@yahoo.com
-                    </div>
-                </div>
-                <div class="all-info" style="display:none">
-                    <div class="top">
-                        <div class="field">
-                            <div class="label">
-                                User ID:
-                            </div>
-                            <div class="value">
-                                asdfghjklqwertyuiop
-                            </div>
-                        </div>
-                        <div class="delete-button">
-                            <span class="material-icons-outlined" onclick="event.stopPropagation(); deleteAccount(this)">delete</span>
-                        </div>
-                    </div>
-                    <div class="confirmation" style="display:none">
-                        <div class="question">
-                            Are you sure you want to delete this account?
-                        </div>
-                        <div class="button-wrapper">
-                            <div class="button-yes" onclick="event.stopPropagation(); 
-                            confirmDeleteAccount(this)">
-                                Yes
-                            </div>
-                            <div class="button-no" onclick="event.stopPropagation(); 
-                            infirmDeleteAccount(this)">
-                                No
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            First Name:
-                        </div>
-                        <div class="value">
-                            Ioana
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Last Name:
-                        </div>
-                        <div class="value">
-                            Pelin
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Username:
-                        </div>
-                        <div class="value">
-                            ioanapelinn
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Email:
-                        </div>
-                        <div class="value">
-                            ioanapelin0@gmail.com
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="account-box" onclick="changeAccountView(this)">
-                <div class="info-preview">
-                    <div class=" names ">
-                        Alex Amarandei
-                    </div>
-                    <div class="email ">
-                        alex@yahoo.com
-                    </div>
-                </div>
-                <div class="all-info" style="display:none">
-                    <div class="top">
-                        <div class="field">
-                            <div class="label">
-                                User ID:
-                            </div>
-                            <div class="value">
-                                asdfghjklqwertyuiop
-                            </div>
-                        </div>
-                        <div class="delete-button">
-                            <span class="material-icons-outlined" onclick="event.stopPropagation(); deleteAccount(this)">delete</span>
-                        </div>
-                    </div>
-                    <div class="confirmation" style="display:none">
-                        <div class="question">
-                            Are you sure you want to delete this account?
-                        </div>
-                        <div class="button-wrapper">
-                            <div class="button-yes" onclick="event.stopPropagation(); 
-                            confirmDeleteAccount(this)">
-                                Yes
-                            </div>
-                            <div class="button-no" onclick="event.stopPropagation(); 
-                            infirmDeleteAccount(this)">
-                                No
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            First Name:
-                        </div>
-                        <div class="value">
-                            Ioana
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Last Name:
-                        </div>
-                        <div class="value">
-                            Pelin
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Username:
-                        </div>
-                        <div class="value">
-                            ioanapelinn
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Email:
-                        </div>
-                        <div class="value">
-                            ioanapelin0@gmail.com
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="account-box" onclick="changeAccountView(this)">
-                <div class="info-preview">
-                    <div class=" names ">
-                        Alex Amarandei
-                    </div>
-                    <div class="email ">
-                        alex@yahoo.com
-                    </div>
-                </div>
-                <div class="all-info" style="display:none">
-                    <div class="top">
-                        <div class="field">
-                            <div class="label">
-                                User ID:
-                            </div>
-                            <div class="value">
-                                asdfghjklqwertyuiop
-                            </div>
-                        </div>
-                        <div class="delete-button">
-                            <span class="material-icons-outlined" onclick="event.stopPropagation(); deleteAccount(this)">delete</span>
-                        </div>
-                    </div>
-                    <div class="confirmation" style="display:none">
-                        <div class="question">
-                            Are you sure you want to delete this account?
-                        </div>
-                        <div class="button-wrapper">
-                            <div class="button-yes" onclick="event.stopPropagation(); 
-                            confirmDeleteAccount(this)">
-                                Yes
-                            </div>
-                            <div class="button-no" onclick="event.stopPropagation(); 
-                            infirmDeleteAccount(this)">
-                                No
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            First Name:
-                        </div>
-                        <div class="value">
-                            Ioana
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Last Name:
-                        </div>
-                        <div class="value">
-                            Pelin
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Username:
-                        </div>
-                        <div class="value">
-                            ioanapelinn
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Email:
-                        </div>
-                        <div class="value">
-                            ioanapelin0@gmail.com
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="account-box" onclick="changeAccountView(this)">
-                <div class="info-preview">
-                    <div class=" names ">
-                        Alex Amarandei
-                    </div>
-                    <div class="email ">
-                        alex@yahoo.com
-                    </div>
-                </div>
-                <div class="all-info" style="display:none">
-                    <div class="top">
-                        <div class="field">
-                            <div class="label">
-                                User ID:
-                            </div>
-                            <div class="value">
-                                asdfghjklqwertyuiop
-                            </div>
-                        </div>
-                        <div class="delete-button">
-                            <span class="material-icons-outlined" onclick="event.stopPropagation(); deleteAccount(this)">delete</span>
-                        </div>
-                    </div>
-                    <div class="confirmation" style="display:none">
-                        <div class="question">
-                            Are you sure you want to delete this account?
-                        </div>
-                        <div class="button-wrapper">
-                            <div class="button-yes" onclick="event.stopPropagation(); 
-                            confirmDeleteAccount(this)">
-                                Yes
-                            </div>
-                            <div class="button-no" onclick="event.stopPropagation(); 
-                            infirmDeleteAccount(this)">
-                                No
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            First Name:
-                        </div>
-                        <div class="value">
-                            Ioana
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Last Name:
-                        </div>
-                        <div class="value">
-                            Pelin
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Username:
-                        </div>
-                        <div class="value">
-                            ioanapelinn
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Email:
-                        </div>
-                        <div class="value">
-                            ioanapelin0@gmail.com
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="account-box" onclick="changeAccountView(this)">
-                <div class="info-preview">
-                    <div class=" names ">
-                        Alex Amarandei
-                    </div>
-                    <div class="email ">
-                        alex@yahoo.com
-                    </div>
-                </div>
-                <div class="all-info" style="display:none">
-                    <div class="top">
-                        <div class="field">
-                            <div class="label">
-                                User ID:
-                            </div>
-                            <div class="value">
-                                asdfghjklqwertyuiop
-                            </div>
-                        </div>
-                        <div class="delete-button">
-                            <span class="material-icons-outlined" onclick="event.stopPropagation(); deleteAccount(this)">delete</span>
-                        </div>
-                    </div>
-                    <div class="confirmation" style="display:none">
-                        <div class="question">
-                            Are you sure you want to delete this account?
-                        </div>
-                        <div class="button-wrapper">
-                            <div class="button-yes" onclick="event.stopPropagation(); 
-                            confirmDeleteAccount(this)">
-                                Yes
-                            </div>
-                            <div class="button-no" onclick="event.stopPropagation(); 
-                            infirmDeleteAccount(this)">
-                                No
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            First Name:
-                        </div>
-                        <div class="value">
-                            Ioana
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Last Name:
-                        </div>
-                        <div class="value">
-                            Pelin
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Username:
-                        </div>
-                        <div class="value">
-                            ioanapelinn
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Email:
-                        </div>
-                        <div class="value">
-                            ioanapelin0@gmail.com
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="account-box" onclick="changeAccountView(this)">
-                <div class="info-preview">
-                    <div class=" names ">
-                        Alex Amarandei
-                    </div>
-                    <div class="email ">
-                        alex@yahoo.com
-                    </div>
-                </div>
-                <div class="all-info" style="display:none">
-                    <div class="top">
-                        <div class="field">
-                            <div class="label">
-                                User ID:
-                            </div>
-                            <div class="value">
-                                asdfghjklqwertyuiop
-                            </div>
-                        </div>
-                        <div class="delete-button">
-                            <span class="material-icons-outlined" onclick="event.stopPropagation(); deleteAccount(this)">delete</span>
-                        </div>
-                    </div>
-                    <div class="confirmation" style="display:none">
-                        <div class="question">
-                            Are you sure you want to delete this account?
-                        </div>
-                        <div class="button-wrapper">
-                            <div class="button-yes" onclick="event.stopPropagation(); 
-                            confirmDeleteAccount(this)">
-                                Yes
-                            </div>
-                            <div class="button-no" onclick="event.stopPropagation(); 
-                            infirmDeleteAccount(this)">
-                                No
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            First Name:
-                        </div>
-                        <div class="value">
-                            Ioana
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Last Name:
-                        </div>
-                        <div class="value">
-                            Pelin
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Username:
-                        </div>
-                        <div class="value">
-                            ioanapelinn
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="label">
-                            Email:
-                        </div>
-                        <div class="value">
-                            ioanapelin0@gmail.com
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </main>
 

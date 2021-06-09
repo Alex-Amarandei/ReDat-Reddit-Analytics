@@ -125,8 +125,6 @@ async function isValidLogin() {
                 document.getElementById("submit-button-login").innerHTML = "Log In";
             }, 2000);
 
-
-            console.log("eroare din login");
         }
 
     }

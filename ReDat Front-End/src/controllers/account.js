@@ -39,11 +39,14 @@ function deleteAccount() {
 
     }
 }
+let copyEmail = "";
 
 function enable(element) {
     const parent = element.parentElement;
 
     if (parent.childNodes[1].id != "old-password") {
+        if (parent.childNodes[1].id === "email")
+            copyEmail = parent.childNodes[1].value;
         parent.childNodes[1].disabled = false;
         parent.childNodes[3].setAttribute("aria-disabled", false);
         parent.childNodes[3].style.opacity = 1;
@@ -52,6 +55,7 @@ function enable(element) {
         parent.childNodes[5].style.opacity = 0;
         parent.childNodes[5].style.cursor = "default";
     } else {
+
         parent.childNodes[1].disabled = false;
         parent.childNodes[3].disabled = false;
         parent.childNodes[5].setAttribute("aria-disabled", false);
@@ -73,22 +77,55 @@ async function disable(element) {
         case "first-name":
         case "last-name":
         case "user-name":
-        case "email":
             if (isValid(elementId)) {
                 updateInformation(elementId, parent.childNodes[1].value);
                 setInvisible(elementId, root);
             }
             break;
-        case "old-password":
-            if (await oldPasswordIsCorrect(parent.childNodes[1].value)) {
-                console.log('here');
-                if (isValid("new-password")) {
-                    console.log(parent.childNodes[1].value);
-                    updateInformation("new-password", parent.childNodes[3].value);
+        case "email":
+            if (await emailNotUsed(parent.childNodes[1].value)) {
+                if (isValid(elementId)) {
+                    updateInformation(elementId, parent.childNodes[1].value);
                     setInvisible(elementId, root);
                 }
             } else {
-                document.getElementById(elementId).value = "Invalid Password";
+                document.getElementById(elementId).value = "Email already exists!";
+                setTimeout(() => {
+                    document.getElementById(elementId).value = copyEmail;
+                }, 2000);
+                setInvisible(elementId, root);
+            }
+
+            break;
+        case "old-password":
+
+            if (await oldPasswordIsCorrect(parent.childNodes[1].value)) {
+                console.log('here');
+                if (isValid("new-password")) {
+                    updateInformation("new-password", parent.childNodes[3].value);
+                    setInvisible(elementId, root);
+                } else {
+                    document.getElementById("new-password").type = "Text";
+                    document.getElementById("new-password").value = "Invalid Password";
+                    setTimeout(() => {
+                        document.getElementById("new-password").type = "password";
+                        document.getElementById("new-password").value = "";
+                        document.getElementById("new-password").placeholder = "New Password";
+                        document.getElementById(elementId).value = "";
+                        document.getElementById(elementId).placeholder = "Old Password";
+                    }, 2000);
+                    setInvisible(elementId, root);
+                }
+            } else {
+                document.getElementById(elementId).type = "Text";
+                document.getElementById(elementId).value = "Wrong Password";
+                setTimeout(() => {
+                    document.getElementById(elementId).type = "password";
+                    document.getElementById(elementId).value = "";
+                    document.getElementById(elementId).placeholder = "Old Password";
+                    document.getElementById("new-password").value = "";
+                    document.getElementById("new-password").placeholder = "New Password";
+                }, 2000);
                 setInvisible(elementId, root);
             }
 
@@ -97,10 +134,43 @@ async function disable(element) {
 
 }
 
+function emailNotUsed(email) {
+    return new Promise((resolve, reject) => {
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+        var theUrl = `http://localhost:3030/verify/email/unique?id=${localStorage.getItem("token")}&info=${email}`;
+        xmlhttp.open("GET", theUrl);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(null);
+        xmlhttp.onreadystatechange = () => {
+            if (xmlhttp.readyState !== 4) return;
+
+            // Process our return data
+            if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
+                // What do when the request is successful
+                if (xmlhttp.responseText) {
+                    // parse res body
+                    let res = JSON.parse(xmlhttp.responseText);
+                    if (res.message !== "Email already exists!") {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                }
+
+            } else {
+                // What to do when the request has failed
+                console.log('error', xmlhttp);
+                reject(false);
+            }
+        }
+    })
+}
+
+
 function oldPasswordIsCorrect(password) {
     return new Promise((resolve, reject) => {
         var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
-        var theUrl = `http://localhost:3030/verify/password?id=${localStorage.getItem("token")}&password=${password}`;
+        var theUrl = `http://localhost:3030/verify/password?id=${localStorage.getItem("token")}&info=${password}`;
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(null);
@@ -274,11 +344,6 @@ function isValid(elementId) {
 
     return true;
 }
-
-// if (field.value != confirm.value) {
-//     alert("The passwords do not match.");
-//     return false;
-// }
 
 
 

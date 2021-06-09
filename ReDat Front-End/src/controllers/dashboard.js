@@ -483,6 +483,229 @@ function loadPostsByFilters(selectedCommunities, filterType) {
     }
 }
 
+function removeCommunity(element) {
+    const communityName = element.parentElement.parentElement.children[0].children[1].innerHTML;
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = `http://localhost:3031/remove/community`;
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify({
+        id: `${localStorage.getItem("token")}`,
+        community: communityName
+    }));
+    xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState !== 4) return;
+
+        // Process our return data
+        if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
+            // What do when the request is successful
+            if (xmlhttp.responseText) {
+                // parse res body
+                const res = JSON.parse(xmlhttp.response);
+                if (res.removingMessage.length) {
+                    console.log(res.removingMessage);
+                    alert(`Your community was successfully removed!`);
+                    refreshMyCommunities();
+                }
+                // console.log('success', JSON.parse(xmlhttp.responseText));
+            } else {
+                // What to do when the request has failed
+                console.log('error', xmlhttp);
+            }
+
+        }
+    }
+
+}
+
+function subscribeAdminAtCommunity(communityName) {
+    var xmlhttp = new XMLHttpRequest();
+    var theUrl = `http://localhost:3031/subscribe/admin/at/community`;
+    xmlhttp.open("POST", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify({
+        redditToken: `${localStorage.getItem("redditToken")}`,
+        community: communityName
+    }));
+    xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState !== 4) return;
+
+        // Process our return data
+        if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
+            // What do when the request is successful
+            if (xmlhttp.responseText) {
+                // parse res body
+                const res = JSON.parse(xmlhttp.response);
+                if (res.message === "Subscription was successfully made!") {
+                    alert(`Your subscription was succesfully made!`);
+                }
+                // console.log('success', JSON.parse(xmlhttp.responseText));
+            } else {
+                // What to do when the request has failed
+                console.log('error', xmlhttp);
+            }
+
+        }
+    }
+}
+
+async function adminIsSubscribedAtCommunity(communityName) {
+    return new Promise((resolve, reject) => {
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+        var theUrl = `http://localhost:3031/admin/subscribed/at/community?id=${localStorage.getItem("token")}&redditToken=${localStorage.getItem("redditToken")}&communityName=${communityName}`;
+        xmlhttp.open("GET", theUrl);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(null);
+        xmlhttp.onreadystatechange = () => {
+            if (xmlhttp.readyState !== 4) return;
+
+            // Process our return data
+            if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
+                // What do when the request is successful
+                if (xmlhttp.responseText) {
+                    // parse res body
+                    let res = JSON.parse(xmlhttp.responseText);
+                    if (res.message === "Already subscribed") {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                }
+
+            } else {
+                // What to do when the request has failed
+                console.log('error', xmlhttp);
+                reject(false);
+            }
+        }
+    })
+}
+
+async function addCommunity(element) {
+    const communityName = element.parentElement.parentElement.children[0].children[1].innerHTML;
+    let alreadySubscribed = await adminIsSubscribedAtCommunity(communityName);
+    console.log(alreadySubscribed);
+    if (!alreadySubscribed)
+        subscribeAdminAtCommunity(communityName);
+
+    // addCommunityToUser(localStorage.getItem("token"), localStorage.getItem("redditToken"), communityName)
+    // refreshMyCommunities();
+}
+
+function searchOnReddit() {
+    const searchInput = document.forms["search-form"]["search"].value;
+    console.log(searchInput);
+    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+    var theUrl = `http://localhost:3031/search/communities?id=${localStorage.getItem("token")}&redditToken=${localStorage.getItem("redditToken")}&searchInput=${searchInput}`;
+    xmlhttp.open("GET", theUrl);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(null);
+    xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState !== 4) return;
+
+        // Process our return data
+        if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
+            // What do when the request is successful
+            if (xmlhttp.responseText) {
+                // parse res body
+                let res = JSON.parse(xmlhttp.responseText);
+
+                res = res.sort()
+                let myCommunitiesNames = [];
+                const myCommunities = document.getElementById("communities-list");
+
+                for (let i = 0; i < myCommunities.children.length; i++) {
+                    myCommunitiesNames = myCommunitiesNames.concat(myCommunities.children[i].children[1].innerHTML);
+                }
+
+                const communitiesWrapper = document.getElementById('post-wrapper')
+                communitiesWrapper.innerHTML = ' ';
+                res.forEach((community) => {
+                    if (myCommunitiesNames.includes(community.name)) {
+                        communitiesWrapper.insertAdjacentHTML('beforeEnd', `
+                        <div class="post">
+                        <div class="post-header" style="display: flex; flex-direction: row; justify-content: space-around; padding-left: 0px;">
+                            <div class="post-header" style="padding-left:10px;">
+                                <span>
+                                <img src=${community.icon} class="icon" >
+                                </span>
+                                <h1>${community.name}</h1>
+                            </div>
+    
+                            <div style="padding-right: 15px;">
+                                 <button class="join-remove-community" onclick="event.stopPropagation(); return removeCommunity(this);"> Remove </button>
+                            </div>
+    
+                        </div>
+    
+                        <h2>Subscribers: ${community.subscribers}</h2>
+    
+                        <h3>${community.title}</h3>
+    
+                        <div class="post-content">
+                            ${community.description}
+                        </div>
+    
+                         </div>
+                        `)
+                    } else {
+                        communitiesWrapper.insertAdjacentHTML('beforeEnd', `
+                        <div class="post">
+                        <div class="post-header" style="display: flex; flex-direction: row; justify-content: space-around; padding-left: 0px;">
+                            <div class="post-header" style="padding-left:10px;">
+                                <span>
+                                <img src=${community.icon} class="icon" >
+                                </span>
+                                <h1>${community.name}</h1>
+                            </div>
+    
+                            <div style="padding-right: 15px;">
+                                 <button class="join-remove-community" onclick="event.stopPropagation(); return addCommunity(this);"> Join </button>
+                            </div>
+    
+                        </div>
+    
+                        <h2>Subscribers: ${community.subscribers}</h2>
+    
+                        <h3>${community.title}</h3>
+    
+                        <div class="post-content">
+                            ${community.description}
+                        </div>
+    
+                         </div>
+                        `)
+                    }
+
+                });
+
+                var elements = document.getElementsByClassName('post');
+                console.log(elements.length)
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].addEventListener('click', function() {
+                        expandCard(this);
+                    })
+                }
+                const doc = document.getElementById('loader');
+                doc.style.opacity = -10;
+                doc.style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10;
+                // console.log('success', JSON.parse(xmlhttp.responseText));
+            } else {
+                const doc = document.getElementById('loader');
+                doc.style.opacity = -10;
+                doc.style.zIndex = -10;
+                document.getElementById('post-wrapper').style.opacity = 10;
+                // What to do when the request has failed
+                console.log('error', xmlhttp);
+            }
+        }
+
+
+    }
+
+}
+
 function logoutUser() {
     localStorage.clear();
     var str = window.location.href;
@@ -517,9 +740,8 @@ window.onload = () => {
     }
 }
 
-
-(() => {
-
+function refreshMyCommunities() {
+    console.log("apel")
     var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
     var theUrl = `http://localhost:3031/my-communities?id=${localStorage.getItem("token")}`;
     xmlhttp.open("GET", theUrl);
@@ -571,4 +793,8 @@ window.onload = () => {
 
 
     }
+}
+
+(() => {
+    refreshMyCommunities();
 })();

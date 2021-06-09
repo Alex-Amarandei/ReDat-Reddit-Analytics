@@ -1,3 +1,4 @@
+const { resolve4 } = require('dns');
 const http = require('http')
 const qs = require('querystring')
 const url = require('url')
@@ -33,10 +34,10 @@ const server = http.createServer((req, res) => {
 async function handleGetReq(req, res) {
     const { pathname, query } = url.parse(req.url)
 
-    if (pathname !== '/my/information' && pathname !== '/verify/password') {
+    if (pathname !== '/my/information' && pathname !== '/verify/password' && pathname !== '/verify/email/unique') {
         return handleError(res, 404)
     }
-    let { id, password } = qs.parse(query);
+    let { id, info } = qs.parse(query);
     const userId = id.split('_')[0];
 
     if (!id) {
@@ -55,12 +56,24 @@ async function handleGetReq(req, res) {
                     email: userInformation[0].email,
                 }));
                 break;
+
             case '/verify/password':
                 userInformation[0].password = Users.rightShifting(userInformation[0].password, 5);
-                if (userInformation[0].password === password)
+                if (userInformation[0].password === info)
                     res.write(JSON.stringify({ message: "Same password" }));
                 else
                     res.write(JSON.stringify({ message: "Wrong password" }));
+                break;
+
+            case '/verify/email/unique':
+                const checkIfUserExists = await Users.checkIfEmailAlreadyExists(info);
+                if (checkIfUserExists.length !== 0) {
+                    if (checkIfUserExists[0].id !== userId)
+                        res.write(JSON.stringify({ message: "Email already exists!" }));
+                    else
+                        res.write(JSON.stringify({ message: "Email is valid!" }));
+                } else
+                    res.write(JSON.stringify({ message: "Email is valid!" }));
                 break;
             default:
                 break;
@@ -152,6 +165,7 @@ async function handlePostReq(req, res) {
                         throw { statusCode: 404, message: 'User not found!' }
                     }
                     let responseUpdate = await Users.editUser(userId, data.field, data.newValue);
+                    console.log(responseUpdate);
                     if (responseUpdate) {
                         res.setHeader('Content-Type', '*/*');
                         res.statusCode = 200;
@@ -179,7 +193,6 @@ async function handlePostReq(req, res) {
 
 
             } catch (err) {
-                console.log(err);
                 res.setHeader('Content-Type', '*/*');
                 res.statusCode = err.statusCode;
                 res.end(JSON.stringify(err.message));

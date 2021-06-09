@@ -93,12 +93,14 @@ async function getUserById(userId) {
 async function editUser(userId, field, value) {
     return new Promise((resolve, reject) => {
         const updateUserSql = `UPDATE users SET ${field} = ? WHERE id = ?`;
+        if (field === "password") {
+            value = Users.leftShifting(value, 5);
+        }
 
         con.query(updateUserSql, [value, userId], (err, result) => {
             if (err) {
                 reject(err);
             }
-            console.log(updateUserSql);
             resolve(result);
         })
 

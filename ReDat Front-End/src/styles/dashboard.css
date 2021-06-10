@@ -619,7 +619,7 @@ main {
     align-items: center;
     height: 100%;
     width: 30%;
-    font-size: 16px;
+    font-size: 1vmax;
     font-weight: bold;
     border-radius: 4px;
     box-shadow: #00223e 2px 5px 10px -2px;
@@ -658,7 +658,9 @@ main {
 }
 
 .selection {
-    height: 33.3%;
+    font-size: 1vmax;
+    font-weight: bold;
+    height: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -680,4 +682,25 @@ main {
 .post.stats img {
     border-radius: 20px;
     height: 90%;
+}
+
+#generate-button {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
+    font-size: 1vmax;
+    font-weight: bold;
+    border-radius: 4px;
+    box-shadow: #00223e 2px 5px 10px -2px;
+    white-space: wrap;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#generate-button:hover {
+    background-color: rgba(247, 182, 158, 0.8);
 }

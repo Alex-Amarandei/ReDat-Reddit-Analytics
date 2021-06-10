@@ -13,6 +13,10 @@
     <meta name="author" content="Alex Amarandei, Ioana Pelin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../controllers/dashboard.js"></script>
+    <script src="../controllers/stats.js"></script>
+    <script src="../controllers/utils.js"></script>
+    <script src="../controllers/push-notifications.js"></script>
+
 
 </head>
 
@@ -26,7 +30,7 @@
                 <form name="search-form" action="#" onSubmit="return false;">
                     <input type="text" placeholder="Search..." name="search">
                     <button type="button" class="search-button" onclick="return searchOnReddit()">
-                        <span class="material-icons-outlined"   >search</span>
+                        <span class="material-icons-outlined">search</span>
                     </button>
                 </form>
             </li>
@@ -119,23 +123,22 @@
                 </div>
 
                 <div id="stats-toolbar-left" class="toolbar-wrapper left" style="justify-content:space-between;padding-right:5px;display:none;">
-                    <div class="stat-label export-button">Export</div>
+                    <div class="stat-label export-button" onclick="downloadCanvasAsImage()" style="font-size: 1.5vmax; font-weight: bold">Export</div>
 
                     <div class="dropdown">
-                        <div class="stat-label drop-button">X-Axis</div>
+                        <div class="stat-label drop-button">Action</div>
                         <div class="dropdown-content">
-                            <div class="selection">Choice 1</div>
-                            <div class="selection">Choice 2</div>
-                            <div class="selection">Choice 3</div>
+                            <div class="selection" id="comments" onclick="return selectAction('comments')">Comments</div>
+                            <div class="selection" id="submissions" onclick="return selectAction('submissions')">Submissions</div>
                         </div>
                     </div>
 
                     <div class="dropdown">
-                        <div class="stat-label drop-button">Y-Axis</div>
+                        <div class="stat-label drop-button">Interval</div>
                         <div class="dropdown-content">
-                            <div class="selection">Choice 1</div>
-                            <div class="selection">Choice 2</div>
-                            <div class="selection">Choice 3</div>
+                            <div class="selection" style="height: 33.3%;" id="minutes" onclick="return selectInterval('minutes')">1 hour</div>
+                            <div class="selection" style="height: 33.3%;" id="hours" onclick="return selectInterval('hours')">6 hours</div>
+                            <div class="selection" style="height: 33.3%;" id="day" onclick="return selectInterval('day')">12 hours</div>
                         </div>
                     </div>
                 </div>
@@ -154,13 +157,13 @@
 
                 <div id="stats-toolbar-right" class="toolbar-wrapper right" style="display:none">
                     <input type="radio" id="bar" name="type" value="bar">
-                    <label onclick="barChartSelected()" for="bar">Bar</label>
+                    <label onclick="selectChart('bar-chart')" for="bar">Bar</label>
 
                     <input type="radio" id="column" name="type" value="column">
-                    <label onclick="columnChartSelected()" for="column">Column</label>
+                    <label onclick="selectChart('column-chart')" for="column">Column</label>
 
                     <input type="radio" id="line" name="type" value="line" checked>
-                    <label onclick="lineChartSelected()" for="line">Line</label>
+                    <label onclick="selectChart('line-chart')" for="line">Line</label>
                 </div>
             </div>
 
@@ -169,17 +172,15 @@
             </div>
 
             <div id="stats-wrapper" class="post-wrapper" style="display:none;">
-                <div id="line-chart" class="post stats">
-                    <img src="../images/line-chart.png" alt="Line Chart">
-                </div>
+                <canvas id="line-chart" style="display:none;">
+                </canvas>
 
-                <div id="bar-chart" class="post stats" style="display:none;">
-                    <img src="../images/bar-chart.png" alt="Line Chart">
-                </div>
+                <canvas id="bar-chart" style="display:none;">
+                </canvas>
 
-                <div id="column-chart" class="post stats" style="display:none;">
-                    <img src="../images/column-chart.png" alt="Line Chart">
-                </div>
+                <canvas id="column-chart" style="display:none;">
+                </canvas>
+                <button id="generate-button" onclick="generateStats()">Generate Statistics</button>
             </div>
         </div>
 

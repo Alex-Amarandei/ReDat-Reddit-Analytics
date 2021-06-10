@@ -4,14 +4,15 @@ function deleteAccount() {
             "Are you sure you want to delete your account?\nThis can't be undone."
         )
     ) {
-
         var xmlhttp = new XMLHttpRequest();
         var theUrl = `http://localhost:3030/delete/user`;
         xmlhttp.open("POST", theUrl);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(JSON.stringify({
-            id: `${localStorage.getItem("token")}`
-        }));
+        xmlhttp.send(
+            JSON.stringify({
+                id: `${localStorage.getItem("token")}`,
+            })
+        );
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
@@ -31,12 +32,10 @@ function deleteAccount() {
                     }
                 } else {
                     // What to do when the request has failed
-                    alert("Your account couldn't be deleted!")
+                    alert("Your account couldn't be deleted!");
                 }
-
             }
-        }
-
+        };
     }
 }
 let copyEmail = "";
@@ -55,7 +54,6 @@ function enable(element) {
         parent.childNodes[5].style.opacity = 0;
         parent.childNodes[5].style.cursor = "default";
     } else {
-
         parent.childNodes[1].disabled = false;
         parent.childNodes[3].disabled = false;
         parent.childNodes[5].setAttribute("aria-disabled", false);
@@ -71,7 +69,6 @@ async function disable(element) {
     const parent = element.parentElement;
     const elementId = parent.childNodes[1].id;
     const root = parent.childNodes;
-
 
     switch (elementId) {
         case "first-name":
@@ -98,9 +95,8 @@ async function disable(element) {
 
             break;
         case "old-password":
-
             if (await oldPasswordIsCorrect(parent.childNodes[1].value)) {
-                console.log('here');
+                console.log("here");
                 if (isValid("new-password")) {
                     updateInformation("new-password", parent.childNodes[3].value);
                     setInvisible(elementId, root);
@@ -110,7 +106,8 @@ async function disable(element) {
                     setTimeout(() => {
                         document.getElementById("new-password").type = "password";
                         document.getElementById("new-password").value = "";
-                        document.getElementById("new-password").placeholder = "New Password";
+                        document.getElementById("new-password").placeholder =
+                            "New Password";
                         document.getElementById(elementId).value = "";
                         document.getElementById(elementId).placeholder = "Old Password";
                     }, 2000);
@@ -131,13 +128,14 @@ async function disable(element) {
 
             break;
     }
-
 }
 
 function emailNotUsed(email) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
-        var theUrl = `http://localhost:3030/verify/email/unique?id=${localStorage.getItem("token")}&info=${email}`;
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var theUrl = `http://localhost:3030/verify/email/unique?id=${localStorage.getItem(
+      "token"
+    )}&info=${email}`;
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(null);
@@ -156,21 +154,21 @@ function emailNotUsed(email) {
                         resolve(false);
                     }
                 }
-
             } else {
                 // What to do when the request has failed
-                console.log('error', xmlhttp);
+                console.log("error", xmlhttp);
                 reject(false);
             }
-        }
-    })
+        };
+    });
 }
-
 
 function oldPasswordIsCorrect(password) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
-        var theUrl = `http://localhost:3030/verify/password?id=${localStorage.getItem("token")}&info=${password}`;
+        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var theUrl = `http://localhost:3030/verify/password?id=${localStorage.getItem(
+      "token"
+    )}&info=${password}`;
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(null);
@@ -189,17 +187,14 @@ function oldPasswordIsCorrect(password) {
                         resolve(false);
                     }
                 }
-
             } else {
                 // What to do when the request has failed
-                console.log('error', xmlhttp);
+                console.log("error", xmlhttp);
                 reject(false);
             }
-        }
-    })
+        };
+    });
 }
-
-
 
 function updateInformation(id, value) {
     let dbField = "";
@@ -223,19 +218,19 @@ function updateInformation(id, value) {
         case "new-password":
             dbField = "password";
             break;
-
     }
-
 
     var xmlhttp = new XMLHttpRequest();
     var theUrl = `http://localhost:3030/edit/user`;
     xmlhttp.open("POST", theUrl);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify({
-        id: `${localStorage.getItem("token")}`,
-        field: dbField,
-        newValue: value
-    }));
+    xmlhttp.send(
+        JSON.stringify({
+            id: `${localStorage.getItem("token")}`,
+            field: dbField,
+            newValue: value,
+        })
+    );
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
@@ -251,11 +246,10 @@ function updateInformation(id, value) {
                 // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
                 // What to do when the request has failed
-                console.log('error', xmlhttp);
+                console.log("error", xmlhttp);
             }
-
         }
-    }
+    };
 }
 
 function setInvisible(elementId, root) {
@@ -285,8 +279,6 @@ function setInvisible(elementId, root) {
             break;
     }
 }
-
-
 
 function isValid(elementId) {
     const field = document.getElementById(elementId);
@@ -345,9 +337,6 @@ function isValid(elementId) {
     return true;
 }
 
-
-
-
 function logoutUser() {
     localStorage.clear();
     var str = window.location.href;
@@ -358,9 +347,10 @@ function logoutUser() {
 }
 
 (() => {
-
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
-    var theUrl = `http://localhost:3030/my/information?id=${localStorage.getItem("token")}`;
+    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+    var theUrl = `http://localhost:3030/my/information?id=${localStorage.getItem(
+    "token"
+  )}`;
     xmlhttp.open("GET", theUrl);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(null);
@@ -384,19 +374,16 @@ function logoutUser() {
                 lastName.value = res.last_name;
                 userName.value = res.username;
                 email.value = res.email;
-
             }
-
         } else {
             // What to do when the request has failed
-            console.log('error', xmlhttp);
+            console.log("error", xmlhttp);
         }
-    }
-
+    };
 })();
 
 (() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
         var str = window.location.href;
         var lastIndex = str.lastIndexOf("/");
@@ -404,6 +391,6 @@ function logoutUser() {
         var new_path = path + "/login.html";
         window.location.assign(new_path);
     } else {
-        console.log('are token');
+        console.log("are token");
     }
 })();

@@ -1,8 +1,6 @@
 (() => {
     localStorage.clear();
-})()
-
-
+})();
 
 function changeToSignup() {
     const circle = document.getElementById("circle-shape");
@@ -61,22 +59,23 @@ function changeToLogin() {
 }
 
 async function isValidLogin() {
-
     const userName = document.forms["login-form"]["user"];
     const password = document.forms["login-form"]["login-password"];
 
-    // ========== XML HTTP REQUEST MODEL ======== 
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+    // ========== XML HTTP REQUEST MODEL ========
+    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
     var theUrl = "http://localhost:3030/user";
     xmlhttp.open("PUT", theUrl);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify({
-        userName: userName.value,
-        password: password.value
-    }));
+    xmlhttp.send(
+        JSON.stringify({
+            userName: userName.value,
+            password: password.value,
+        })
+    );
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
-
+        console.log(xmlhttp.status);
         // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
             // What do when the request is successful
@@ -85,51 +84,63 @@ async function isValidLogin() {
                 const res = JSON.parse(xmlhttp.response);
 
                 // set local storage
-                localStorage.setItem('token', res.token);
-                localStorage.setItem('redditToken', res.redditToken);
-                localStorage.setItem('communities', 'all');
-                localStorage.setItem('filter', 'new');
-                localStorage.setItem('pageAction', 'explore');
+                localStorage.setItem("token", res.token);
+                localStorage.setItem("redditToken", res.redditToken);
+                localStorage.setItem("communities", "all");
+                localStorage.setItem("filter", "new");
+                localStorage.setItem("pageAction", "explore");
                 var communitiesToShow = [];
-                localStorage.setItem('communitiesToShow', JSON.stringify(communitiesToShow));
+                localStorage.setItem(
+                    "communitiesToShow",
+                    JSON.stringify(communitiesToShow)
+                );
                 var subjectsToShow = [];
-                localStorage.setItem('subjectsToShow', JSON.stringify(subjectsToShow));
+                localStorage.setItem("subjectsToShow", JSON.stringify(subjectsToShow));
 
                 // RERUTARE in alta parte
-                console.log(res);
 
                 if (!res.isAdmin) {
-                    localStorage.setItem('isAdmin', false)
+                    localStorage.setItem("isAdmin", false);
                     var str = window.location.href;
                     var lastIndex = str.lastIndexOf("/");
                     var path = str.substring(0, lastIndex);
                     var new_path = path + "/dashboard.html";
+
+                    console.log(res);
                     window.location.assign(new_path);
                 } else {
-                    localStorage.setItem('isAdmin', true)
+                    localStorage.setItem("isAdmin", true);
                     var str = window.location.href;
                     var lastIndex = str.lastIndexOf("/");
                     var path = str.substring(0, lastIndex);
                     var new_path = path + "/admin.html";
+                    window.setInterval(() => {
+                        console.log("Baga intervalu boss");
+                    }, 5000);
+                    console.log(res);
                     window.location.assign(new_path);
                 }
             }
         } else {
-            document.getElementById("submit-button-login").innerHTML = "Wrong email or password!";
+            const res = JSON.parse(xmlhttp.response);
+            if (res.errMessage == "You are banned") {
+                document.getElementById("submit-button-login").innerHTML =
+                    "You have been banned!";
+            } else {
+                document.getElementById("submit-button-login").innerHTML =
+                    "Wrong email or password!";
+            }
+
             setTimeout(() => {
-                document.getElementById("submit-button-login")
+                document.getElementById("submit-button-login");
                 document.forms["login-form"]["user"].value = "";
                 document.forms["login-form"]["user"].placeholder = "Email";
                 document.forms["login-form"]["login-password"].value = "";
                 document.forms["login-form"]["login-password"].placeholder = "Password";
                 document.getElementById("submit-button-login").innerHTML = "Log In";
             }, 2000);
-
         }
-
-    }
-
-
+    };
 }
 
 async function isValidRegister() {
@@ -187,23 +198,24 @@ async function isValidRegister() {
         isValid = false;
     }
 
-
     if (!isValid) {
         return;
     }
 
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
     var theUrl = "http://localhost:3030/user";
     xmlhttp.open("POST", theUrl);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify({
-        userName: userName.value,
-        password: password.value,
-        email: email.value,
-        confirm: confirm.value,
-        firstName: firstName.value,
-        lastName: lastName.value,
-    }));
+    xmlhttp.send(
+        JSON.stringify({
+            userName: userName.value,
+            password: password.value,
+            email: email.value,
+            confirm: confirm.value,
+            firstName: firstName.value,
+            lastName: lastName.value,
+        })
+    );
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
@@ -214,18 +226,16 @@ async function isValidRegister() {
                 // parse res body
                 const res = JSON.parse(xmlhttp.response);
                 if (!!res.registerMessage.length) {
-                    alert('Your account was succesfully created!')
+                    alert("Your account was succesfully created!");
                     setTimeout(() => {
-                        document.getElementById('login-button').click();
-                    }, 1000)
+                        document.getElementById("login-button").click();
+                    }, 1000);
                 }
-
             }
             // console.log('success', JSON.parse(xmlhttp.responseText));
         } else {
             // What to do when the request has failed
-            console.log('error', xmlhttp);
+            console.log("error", xmlhttp);
         }
-
-    }
+    };
 }

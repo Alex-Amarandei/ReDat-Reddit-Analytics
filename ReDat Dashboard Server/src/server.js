@@ -39,13 +39,21 @@ async function handleGetReq(req, res) {
         pathname !== "/admin/subscribed/at/community" &&
         pathname !== "/selected/your/communities" &&
         pathname !== "/selected/your/subjects" &&
-        pathname !== "/search/communities"
+        pathname !== "/search/communities" &&
+        pathname !== "/get/notifications"
     ) {
         return handleError(res, 404);
     }
 
-    let { id, redditToken, filterType, toShow, searchInput, communityName } =
-    qs.parse(query);
+    let {
+        id,
+        redditToken,
+        filterType,
+        toShow,
+        searchInput,
+        communityName,
+        lastUtc,
+    } = qs.parse(query);
     const userId = id.split("_")[0];
 
     if (!id) {
@@ -70,7 +78,8 @@ async function handleGetReq(req, res) {
                     const getCommunitiesRes = await RedditData.getCommunityPosts(
                         filterType,
                         redditToken,
-                        localDbCommunities[i].community_name
+                        localDbCommunities[i].community_name,
+                        50
                     );
                     posts = posts.concat(getCommunitiesRes);
                 }
@@ -150,12 +159,59 @@ async function handleGetReq(req, res) {
                     res.write(JSON.stringify({ message: "Not subscribed" }));
                 }
                 break;
+
+            case "/get/notifications":
+                if (!redditToken || !lastUtc || !id) {
+                    throw { statusCode: 400, message: "Invalid request" };
+                }
+                let finalPosts = [];
+                let max_utc = 0;
+                for (i = 0; i < localDbCommunities.length; i++) {
+                    const posts = await RedditData.getCommunityPosts(
+                        "new",
+                        redditToken,
+                        localDbCommunities[i].community_name,
+                        5
+                    );
+
+                    let newPost = posts.filter((post) => post.data.created_utc > lastUtc);
+
+                    for (let i = 0; i < newPost.length; i++) {
+                        if (newPost[i]) {
+                            if (newPost[i].data.created_utc > max_utc) {
+                                max_utc = newPost[i].data.created_utc;
+                            }
+                            finalPosts = finalPosts.concat({
+                                community: newPost[i].data.subreddit,
+                                title: newPost[i].data.title,
+                            });
+                        }
+                    }
+                }
+
+                const objToSend = {};
+
+                for (i = 0; i < finalPosts.length; i++) {
+                    objToSend[finalPosts[i].community] = [];
+                }
+
+                for (i = 0; i < finalPosts.length; i++) {
+                    objToSend[finalPosts[i].community] = [
+                        ...objToSend[finalPosts[i].community],
+                        finalPosts[i].title,
+                    ];
+                }
+                objToSend.max_utc = max_utc;
+                console.log(objToSend);
+                res.write(JSON.stringify(objToSend));
+                break;
         }
 
         if (
             pathname !== "/my-communities" &&
             pathname !== "/search/communities" &&
-            pathname !== "/admin/subscribed/at/community"
+            pathname !== "/admin/subscribed/at/community" &&
+            pathname !== "/get/notifications"
         ) {
             if (posts && posts.length) {
                 posts.forEach((post) => {

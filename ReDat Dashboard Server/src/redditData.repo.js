@@ -1,11 +1,15 @@
 var con = require("./db");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-async function getCommunityPosts(filterType, redditToken, communityName) {
+async function getCommunityPosts(
+    filterType,
+    redditToken,
+    communityName,
+    limit
+) {
     return new Promise((resolve, reject) => {
-        console.log(filterType, redditToken, communityName);
         var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
-        var theUrl = `https://oauth.reddit.com/r/${communityName}/${filterType}.json?limit=50`;
+        var theUrl = `https://oauth.reddit.com/r/${communityName}/${filterType}.json?limit=${limit}`;
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader(
             "Content-Type",
@@ -27,6 +31,7 @@ async function getCommunityPosts(filterType, redditToken, communityName) {
                 // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
                 // What to do when the request has failed
+
                 reject(xmlhttp);
             }
         };

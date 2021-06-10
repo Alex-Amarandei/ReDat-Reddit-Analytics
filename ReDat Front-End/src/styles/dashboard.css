@@ -22,7 +22,7 @@ body {
 }
 
 .dashboard-loader {
-    left: 50%;
+    left: 65%;
     color: #ad9e9e;
     font-size: 20px;
     margin: 100px auto;
@@ -362,7 +362,7 @@ main {
 }
 
 .panel.left-panel {
-    width: 22%;
+    width: 28%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -371,7 +371,7 @@ main {
 
 .panel.mid-panel {
     position: relative;
-    width: 50%;
+    width: 67.5%;
     box-shadow: #00223e 0 8px 10px -2px;
 }
 

@@ -4,6 +4,7 @@
 
 <head>
     <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="../styles/stats.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
@@ -14,8 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../controllers/dashboard.js"></script>
     <script src="../controllers/stats.js"></script>
+    <script src="../controllers/svg-export.min.js"></script>
     <script src="../controllers/utils.js"></script>
-    <script src="../controllers/push-notifications.js"></script>
 
 
 </head>
@@ -73,7 +74,7 @@
             </div>
 
             <div class="sub-panel">
-                <div class="panel-header">Your Subjects</div>
+                <div class="panel-header">Popular Subjects</div>
                 <div class="panel-content" id="subjects-list">
                     <div class="dashboard-loader" id="loader">/</div>
                     <div class="item-subject" onclick="return showPostsBySubject(this, 'Gaming')">
@@ -115,10 +116,10 @@
 
             <div class="toolbar-wrapper">
                 <div id="post-toolbar-left" class="toolbar-wrapper left">
-                    <input type="radio" id="allReddit" name="communities" value="all" checked>
+                    <input type="radio" id="allReddit" name="communities" value="all">
                     <label for="allReddit" onclick="return loadPostsByFilters('all', localStorage.getItem('filter'))">All Communities</label>
 
-                    <input type="radio" id="yourCommunities" name="communities" value="favorite">
+                    <input type="radio" id="yourCommunities" name="communities" value="favorite" checked>
                     <label for="yourCommunities" onclick="return loadPostsByFilters('your', localStorage.getItem('filter'))">Your Communities</label>
                 </div>
 
@@ -184,92 +185,7 @@
             </div>
         </div>
 
-        <div class="panel right-panel">
-            <div class="panel-header">Notifications</div>
-            <div class="panel-content">
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 1</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
 
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 2</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 3</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 4</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 5</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 6</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 7</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 8</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-                <div onclick="expandCard(this)" class="notification-wrapper">
-                    <div class="notification">
-                        <div class="notification-title">Comunitatea 9</div>
-                        <div class="notification-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </div>
-                    </div>
-                    <span onclick="deleteNotification(this)" class="material-icons-outlined">clear</span>
-                </div>
-
-            </div>
-        </div>
     </main>
 
 </body>

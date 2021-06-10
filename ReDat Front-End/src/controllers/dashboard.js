@@ -83,6 +83,7 @@ function switchMode() {
         postWrapper.style.display = "flex";
         statsWrapper.style.display = "none";
 
+        localStorage.setItem("communities", "your");
         localStorage.setItem("pageAction", "explore");
         localStorage.setItem("intervalStats", "");
         localStorage.setItem("actionStats", "");
@@ -107,12 +108,15 @@ function manageClickOnCommunity(element, communityName) {
             for (let i = 0; i < myCommunities.children.length; i++) {
                 myCommunities.children[i].style.backgroundColor = "unset";
             }
+
             element.style.backgroundColor = "#ffffff4D";
         }
 
         localStorage.setItem("subreddit", communityName);
         /////////bagam stats
     } else {
+        localStorage.setItem("communities", "");
+
         if (document.getElementById("allReddit").checked == true)
             document.getElementById("allReddit").checked = false;
         if (document.getElementById("yourCommunities").checked == true)
@@ -176,15 +180,19 @@ function manageClickOnCommunity(element, communityName) {
                     let res = JSON.parse(xmlhttp.responseText);
                     console.log(res);
 
-                    if (filterType === "new")
-                        res = res.sort((obj1, obj2) => obj1.createdAt < obj2.createdAt);
-                    else res = res.sort((obj1, obj2) => obj1.score < obj2.score);
-
+                    if (filterType == "new") {
+                        res = res.sort((obj1, obj2) =>
+                            new Date(obj1.createdAt) < new Date(obj2.createdAt) ? 1 : -1
+                        );
+                    } else
+                        res = res.sort(
+                            (obj1, obj2) => parseFloat(obj1.score) > parseFloat(obj2.score)
+                        );
                     const postWrapper = document.getElementById("post-wrapper");
                     postWrapper.innerHTML = " ";
                     res.forEach((post) => {
                         postWrapper.insertAdjacentHTML(
-                            "afterbegin",
+                            "beforeEnd",
                             `
                     <div class="post">
                     <div class="post-header">
@@ -234,6 +242,7 @@ function showPostsBySubject(element, subject) {
     if (pageAction === "stats") {
         return;
     }
+    localStorage.setItem("communities", "");
 
     if (document.getElementById("allReddit").checked == true)
         document.getElementById("allReddit").checked = false;
@@ -289,15 +298,19 @@ function showPostsBySubject(element, subject) {
                 let res = JSON.parse(xmlhttp.responseText);
                 console.log(res);
 
-                if (filterType === "new")
-                    res = res.sort((obj1, obj2) => obj1.createdAt < obj2.createdAt);
-                else res = res.sort((obj1, obj2) => obj1.score < obj2.score);
-
+                if (filterType == "new")
+                    res = res.sort((obj1, obj2) =>
+                        new Date(obj1.createdAt) < new Date(obj2.createdAt) ? 1 : -1
+                    );
+                else
+                    res = res.sort(
+                        (obj1, obj2) => parseFloat(obj1.score) > parseFloat(obj2.score)
+                    );
                 const postWrapper = document.getElementById("post-wrapper");
                 postWrapper.innerHTML = " ";
                 res.forEach((post) => {
                     postWrapper.insertAdjacentHTML(
-                        "afterbegin",
+                        "beforeEnd",
                         `
                     <div class="post">
                     <div class="post-header">
@@ -350,17 +363,21 @@ function loadPostsByFilters(selectedCommunities, filterType) {
     doc.style.zIndex = 10;
     document.getElementById("post-wrapper").style.opacity = -10;
 
-    var elements = document.getElementsByClassName("item-subject");
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].style.backgroundColor = "unset";
-    }
-    var elements = document.getElementsByClassName("item-community");
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].style.backgroundColor = "unset";
-    }
-
     localStorage.setItem("communities", selectedCommunities);
     localStorage.setItem("filter", filterType);
+
+    if (localStorage.getItem("communities")) {
+        console.log("aaaaaaaaaaaa");
+        var elements = document.getElementsByClassName("item-subject");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.backgroundColor = "unset";
+        }
+        var elements = document.getElementsByClassName("item-community");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.backgroundColor = "unset";
+        }
+    }
+
     switch (selectedCommunities) {
         case "all":
             var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
@@ -386,13 +403,12 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                         const res = JSON.parse(xmlhttp.response);
                         const retrievedCommunities = res.data.children;
                         console.log(retrievedCommunities);
-                        var posts = [];
 
                         const postWrapper = document.getElementById("post-wrapper");
                         postWrapper.innerHTML = " ";
                         retrievedCommunities.forEach((community) => {
                             postWrapper.insertAdjacentHTML(
-                                "afterbegin",
+                                "beforeEnd",
                                 `
                             <div class="post">
                             <div class="post-header">
@@ -454,15 +470,23 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                         // parse res body
                         let res = JSON.parse(xmlhttp.responseText);
 
-                        if (filterType === "new")
-                            res = res.sort((obj1, obj2) => obj1.createdAt < obj2.createdAt);
-                        else res = res.sort((obj1, obj2) => obj1.score < obj2.score);
+                        res = res.sort((obj1, obj2) =>
+                            new Date(obj1.createdAt) < new Date(obj2.createdAt) ? 1 : -1
+                        );
+                        console.log(res[0].title, "aici eu mor");
+                        localStorage.setItem("lastUtc", res[0].createdAt.toString());
 
+                        if (filterType == "hot") {
+                            res = res.sort(
+                                (obj1, obj2) => parseFloat(obj1.score) > parseFloat(obj2.score)
+                            );
+                        }
+                        console.log(res);
                         const postWrapper = document.getElementById("post-wrapper");
                         postWrapper.innerHTML = " ";
                         res.forEach((post) => {
                             postWrapper.insertAdjacentHTML(
-                                "afterbegin",
+                                "beforeEnd",
                                 `
                             <div class="post">
                             <div class="post-header">
@@ -660,6 +684,21 @@ async function manageCommunity(element) {
 }
 
 function searchOnReddit() {
+    var elements = document.getElementsByClassName("item-subject");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].style.backgroundColor = "unset";
+    }
+
+    elements = document.getElementsByClassName("item-community");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].style.backgroundColor = "unset";
+    }
+
+    if (document.getElementById("allReddit").checked == true)
+        document.getElementById("allReddit").checked = false;
+    if (document.getElementById("yourCommunities").checked == true)
+        document.getElementById("yourCommunities").checked = false;
+
     const searchInput = document.forms["search-form"]["search"].value;
     console.log(searchInput);
     var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
@@ -881,6 +920,7 @@ function refreshMyCommunities() {
 }
 
 (() => {
+    localStorage.setItem("communities", "your"); ////
     localStorage.setItem("pageAction", "explore");
     localStorage.setItem("chartType", "line-chart");
     localStorage.setItem("subreddit", "");

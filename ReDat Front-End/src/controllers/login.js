@@ -86,7 +86,7 @@ async function isValidLogin() {
                 // set local storage
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("redditToken", res.redditToken);
-                localStorage.setItem("communities", "all");
+                localStorage.setItem("communities", "your"); ////////
                 localStorage.setItem("filter", "new");
                 localStorage.setItem("pageAction", "explore");
                 var communitiesToShow = [];

@@ -63,8 +63,6 @@
     </nav>
 
     <main>
-
-
         <div class="panel left-panel">
             <div class="sub-panel">
                 <div class="panel-header">Your Communities</div>
@@ -124,7 +122,14 @@
                 </div>
 
                 <div id="stats-toolbar-left" class="toolbar-wrapper left" style="justify-content:space-between;padding-right:5px;display:none;">
-                    <div class="stat-label export-button" onclick="downloadCanvasAsImage()" style="font-size: 1.5vmax; font-weight: bold">Export</div>
+                    <div class="dropdown">
+                        <div class="stat-label export-button" style="font-size: 1.5vmax; font-weight: bold">Export</div>
+                        <div class="dropdown-content">
+                            <div class="selection" id="SVG" onclick="exportSVG()">SVG</div>
+                            <div class="selection" id="CSV" onclick="exportToCSV()">CSV</div>
+                        </div>
+                    </div>
+
 
                     <div class="dropdown">
                         <div class="stat-label drop-button">Action</div>
@@ -173,14 +178,8 @@
             </div>
 
             <div id="stats-wrapper" class="post-wrapper" style="display:none;">
-                <canvas id="line-chart" style="display:none;">
-                </canvas>
-
-                <canvas id="bar-chart" style="display:none;">
-                </canvas>
-
-                <canvas id="column-chart" style="display:none;">
-                </canvas>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="canvas" role="img">
+                </svg>
                 <button id="generate-button" onclick="generateStats()">Generate Statistics</button>
             </div>
         </div>

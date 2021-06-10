@@ -1,3 +1,21 @@
+function generateStats() {
+    const community = localStorage.getItem("subreddit");
+    const dataType = localStorage.getItem("actionStats");
+    const timeframe = localStorage.getItem("intervalStats");
+    const chartType = localStorage.getItem("chartType");
+
+    if (community && dataType && timeframe && chartType)
+        getStats(community, dataType, timeframe, chartType);
+    else {
+        document.getElementById("generate-button").innerHTML =
+            "Please select a community, an action, an interval and a chart type before proceeding.";
+        setTimeout(() => {
+            document.getElementById("generate-button").innerHTML =
+                "Generate Statistics";
+        }, 3000);
+    }
+}
+
 function getStats(community, dataType, timeframe, chartType) {
     var xmlhttp = new XMLHttpRequest();
     var url = `http://localhost:3033/${dataType}/${timeframe}/?id=${community}`;
@@ -11,24 +29,54 @@ function getStats(community, dataType, timeframe, chartType) {
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
             if (xmlhttp.responseText) {
                 let res = JSON.parse(xmlhttp.responseText);
+                localStorage.setItem("valuesForStats", res);
 
-                const values = String(res)
-                    .split(",")
-                    .map((res) => {
-                        return Number(res);
-                    });
-
-                chartSelected(values, timeframe, chartType);
-                exportToCSV(values, community, dataType, timeframe);
-                console.log(values, timeframe, chartType);
-            } else {
-                console.log("error", xmlhttp);
+                chartSelected(timeframe, chartType);
+                // exportToCSV(values, community, dataType, timeframe);
+                console.log(timeframe, chartType);
             }
+        } else {
+            document.getElementById("generate-button").innerHTML =
+                "The Pushshift API is currently unavailable, please try again in a minute.";
+            setTimeout(() => {
+                document.getElementById("generate-button").innerHTML =
+                    "Generate Statistics";
+            }, 5000);
         }
     };
 }
 
-function chartSelected(values, timeframe, chartType) {
+function selectChart(chartType) {
+    localStorage.setItem("chartType", chartType);
+
+    const community = localStorage.getItem("subreddit");
+    const dataType = localStorage.getItem("actionStats");
+    const timeframe = localStorage.getItem("intervalStats");
+    const values = localStorage.getItem("valuesForStats");
+
+    if (community && dataType && timeframe && values)
+        chartSelected(timeframe, chartType);
+}
+
+function selectAction(dataType) {
+    localStorage.setItem("actionStats", dataType);
+    localStorage.setItem("valuesForStats", "");
+}
+
+function selectInterval(timeframe) {
+    localStorage.setItem("intervalStats", timeframe);
+    localStorage.setItem("valuesForStats", "");
+}
+
+function chartSelected(timeframe, chartType) {
+    const res = localStorage.getItem("valuesForStats");
+    const values = String(res)
+        .split(",")
+        .map((res) => {
+            return Number(res);
+        });
+    console.log(values);
+
     let svgCanvas = document.getElementById("canvas");
     svgCanvas.innerHTML = "";
     try {
@@ -87,6 +135,7 @@ function drawAxis() {
 
 function drawLabels(timeframe, chartType, maximum) {
     let svgCanvas = document.getElementById("canvas");
+    let text = 0;
     svgCanvas.innerHTML += "<g>";
 
     svgCanvas.innerHTML += `
@@ -209,6 +258,21 @@ function plotBar(values, maximum) {
 }
 
 function exportSVG() {
+    const values = localStorage.getItem("valuesForStats");
+    const community = localStorage.getItem("subreddit");
+    const dataType = localStorage.getItem("actionStats");
+    const timeframe = localStorage.getItem("intervalStats");
+
+    if (!(community && dataType && timeframe && values)) {
+        document.getElementById("generate-button").innerHTML =
+            "Please generate a chart before proceeding.";
+        setTimeout(() => {
+            document.getElementById("generate-button").innerHTML =
+                "Generate Statistics";
+        }, 3000);
+        return;
+    }
+
     let canvas = document.getElementById("canvas");
     canvas.style.height = "560";
     canvas.style.width = "560";
@@ -223,15 +287,36 @@ function exportSVG() {
     canvas.style.width = "80%";
 }
 
-function exportToCSV(values, community, dataType, timeframe) {
+function exportToCSV() {
+    const res = localStorage.getItem("valuesForStats");
+    const community = localStorage.getItem("subreddit");
+    const dataType = localStorage.getItem("actionStats");
+    const timeframe = localStorage.getItem("intervalStats");
+
+    if (!(community && dataType && timeframe && res)) {
+        document.getElementById("generate-button").innerHTML =
+            "Please generate a chart before proceeding.";
+        setTimeout(() => {
+            document.getElementById("generate-button").innerHTML =
+                "Generate Statistics";
+        }, 3000);
+        return;
+    }
+
+    const values = String(res)
+        .split(",")
+        .map((res) => {
+            return Number(res);
+        });
+
     let text = "subreddit,dataType,timeFrame,value\n";
     let interval = "";
     for (i = 0; i < 6; i++) {
-        text += community + "," + dataType + ",";
-        if (timeframe == "minutes") text += i * 10 + "-" + (i + 1) * 10 + ",";
-        else if (timeframe == "hours") text += i + "-" + (i + 1) + ",";
-        else text += i * 2 + "-" + (i + 1) * 2 + ",";
-        text += values[i] + "\n";
+        text += `${community},${dataType},`;
+        if (timeframe == "minutes") text += `${i * 10}-${(i + 1) * 10},`;
+        else if (timeframe == "hours") text += `${i}-${i + 1},`;
+        else text += `${i * 2}-${(i + 1) * 2},`;
+        text += `${values[i]}\n`;
     }
 
     console.log(text);

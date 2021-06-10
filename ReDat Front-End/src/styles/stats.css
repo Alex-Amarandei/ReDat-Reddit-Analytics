@@ -1,5 +1,5 @@
 svg {
-    background-color: aliceblue;
+    background-color: rgba(190, 225, 255, 0.3);
     width: 80%;
     height: 80%;
 }
@@ -20,6 +20,6 @@ svg {
 }
 
 .chart-line {
-    stroke-width: 4px;
-    stroke-linecap: square;
+    stroke-width: 10px;
+    stroke-linecap: round;
 }

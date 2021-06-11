@@ -1,5 +1,4 @@
 const http = require("http");
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const qs = require("querystring");
 const url = require("url");
 const RedditData = require("./src/redditData.repo");
@@ -19,17 +18,14 @@ const server = http.createServer((req, res) => {
     } else if (req.method === "POST") {
         return handlePostReq(req, res);
     } else if (req.method === "DELETE") {
-        return handleDeleteReq(req, res);
+        return res.end("DELETE");
     } else if (req.method === "PUT") {
-        return handlePutReq(req, res);
+        return res.end("PUT");
     } else if (req.method === "OPTIONS") {
         return res.end("OPTIONS");
     }
 });
 
-/////////// TEST FUNCTION CALL ONLY WITH AWAIT (ASYNC)
-
-// GET
 async function handleGetReq(req, res) {
     const { pathname, query } = url.parse(req.url);
 
@@ -202,7 +198,6 @@ async function handleGetReq(req, res) {
                     ];
                 }
                 objToSend.max_utc = max_utc;
-                console.log(objToSend);
                 res.write(JSON.stringify(objToSend));
                 break;
         }
@@ -230,14 +225,17 @@ async function handleGetReq(req, res) {
         res.statusCode = 200;
         return res.end();
     } catch (err) {
-        res.statusCode = err.statusCode;
-        res.end(JSON.stringify({ message: err.message }));
+        if (!Object.keys(http.STATUS_CODES).includes(err.statusCode)) {
+            res.statusCode = 500;
+            res.end(JSON.stringify({ message: "Internal server error" }));
+        } else {
+            res.statusCode = err.statusCode;
+            res.end(JSON.stringify(err.message));
+        }
     }
 }
 
-// POST
 async function handlePostReq(req, res) {
-    /// REGISTER
     const size = parseInt(req.headers["content-length"], 10);
     const buffer = Buffer.allocUnsafe(size);
     var pos = 0;
@@ -277,7 +275,6 @@ async function handlePostReq(req, res) {
                             data.community
                         );
                         if (responseRemoved) {
-                            res.setHeader("Content-Type", "*/*");
                             res.statusCode = 200;
                             res.end(
                                 JSON.stringify({
@@ -290,16 +287,13 @@ async function handlePostReq(req, res) {
                         break;
 
                     case "/subscribe/admin/at/community":
-                        console.log(data.redditToken);
                         let responseSubscription =
                             await RedditData.subscribeAdminAtCommunity(
                                 data.redditToken,
                                 data.community
                             );
 
-                        console.log(responseSubscription);
                         if (responseSubscription) {
-                            res.setHeader("Content-Type", "*/*");
                             res.statusCode = 200;
                             res.end(
                                 JSON.stringify({
@@ -317,10 +311,7 @@ async function handlePostReq(req, res) {
                             user,
                             data.community
                         );
-                        console.log("aici1");
                         if (responseAdd) {
-                            console.log("aici2");
-                            res.setHeader("Content-Type", "*/*");
                             res.statusCode = 200;
                             res.end(
                                 JSON.stringify({
@@ -328,7 +319,6 @@ async function handlePostReq(req, res) {
                                 })
                             );
                         } else {
-                            console.log("aici3");
                             throw {
                                 statusCode: 500,
                                 message: "Internal server error",
@@ -339,58 +329,13 @@ async function handlePostReq(req, res) {
                 }
             } catch (err) {
                 if (!Object.keys(http.STATUS_CODES).includes(err.statusCode)) {
-                    res.setHeader("Content-Type", "*/*");
                     res.statusCode = 500;
                     res.end(JSON.stringify({ message: "Internal server error" }));
                 } else {
-                    res.setHeader("Content-Type", "*/*");
                     res.statusCode = err.statusCode;
                     res.end(JSON.stringify(err.message));
                 }
             }
-        });
-}
-
-// DELETE
-function handleDeleteReq(req, res) {
-    const { pathname, query } = url.parse(req.url);
-    if (pathname !== "/user") {
-        return handleError(res, 404);
-    }
-    const { id } = qs.parse(query);
-    // const userDeleted = Users.deleteUser(id);
-    res.setHeader("Content-Type", "application/json;charset=utf-8");
-    res.end(`{"userDeleted": ${id}}`);
-}
-
-// PUT
-function handlePutReq(req, res) {
-    // LOGIN
-    const { pathname, query } = url.parse(req.url);
-    if (pathname !== "/user") {
-        return handleError(res, 404);
-    }
-    const { id } = qs.parse(query);
-    const size = parseInt(req.headers["content-length"], 10);
-    const buffer = Buffer.allocUnsafe(size);
-    var pos = 0;
-    req
-        .on("data", (chunk) => {
-            const offset = pos + chunk.length;
-            if (offset > size) {
-                reject(413, "Too Large", res);
-                return;
-            }
-            chunk.copy(buffer, pos);
-            pos = offset;
-        })
-        .on("end", async() => {
-            if (pos !== size) {
-                reject(400, "Bad Request", res);
-                return;
-            }
-
-            res.end();
         });
 }
 

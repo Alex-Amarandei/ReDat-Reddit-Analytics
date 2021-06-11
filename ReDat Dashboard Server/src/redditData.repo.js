@@ -8,7 +8,7 @@ async function getCommunityPosts(
     limit
 ) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var xmlhttp = new XMLHttpRequest();
         var theUrl = `https://oauth.reddit.com/r/${communityName}/${filterType}.json?limit=${limit}`;
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader(
@@ -20,18 +20,12 @@ async function getCommunityPosts(
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     const response = JSON.parse(xmlhttp.responseText);
                     resolve(response.data.children);
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
-
                 reject(xmlhttp);
             }
         };
@@ -40,8 +34,8 @@ async function getCommunityPosts(
 
 async function getSubjectPosts(filterType, redditToken, subjectName) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
-        var theUrl = `https://oauth.reddit.com/search?q=${subjectName}/${filterType}`; ////${filterType}
+        var xmlhttp = new XMLHttpRequest();
+        var theUrl = `https://oauth.reddit.com/search?q=${subjectName}/${filterType}`;
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader(
             "Content-Type",
@@ -52,17 +46,12 @@ async function getSubjectPosts(filterType, redditToken, subjectName) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     const response = JSON.parse(xmlhttp.responseText);
                     resolve(response.data.children);
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
                 reject(xmlhttp);
             }
         };
@@ -87,14 +76,10 @@ async function addCommunityToUser(userId, community) {
     return new Promise((resolve, reject) => {
         const insertCommunityToUser =
             "INSERT INTO users_communities(user_id, community_name) VALUES (?, ?)";
-        console.log(insertCommunityToUser, userId, community);
         con.query(insertCommunityToUser, [userId, community], (err, result) => {
             if (err) {
-                console.log("aici4");
                 reject(err);
             }
-            console.log("aici5");
-            console.log(result + "da");
             resolve("Succes");
         });
     });
@@ -116,8 +101,8 @@ async function removeCommunityForUser(userId, community) {
 
 async function getSubscribedCommunities(redditToken) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
-        var theUrl = "https://oauth.reddit.com/subreddits/mine/subscriber"; ////${filterType}
+        var xmlhttp = new XMLHttpRequest();
+        var theUrl = "https://oauth.reddit.com/subreddits/mine/subscriber";
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader(
             "Content-Type",
@@ -128,17 +113,12 @@ async function getSubscribedCommunities(redditToken) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     const response = JSON.parse(xmlhttp.responseText);
                     resolve(response.data.children);
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
                 reject(xmlhttp);
             }
         };
@@ -146,8 +126,8 @@ async function getSubscribedCommunities(redditToken) {
 }
 async function subscribeAdminAtCommunity(redditToken, community) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
-        var theUrl = "https://oauth.reddit.com/api/subscribe"; ////${filterType}
+        var xmlhttp = new XMLHttpRequest();
+        var theUrl = "https://oauth.reddit.com/api/subscribe";
         xmlhttp.open("POST", theUrl);
         xmlhttp.setRequestHeader(
             "Content-Type",
@@ -158,19 +138,12 @@ async function subscribeAdminAtCommunity(redditToken, community) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
-
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
-
                     const response = "Successfully!";
                     resolve(response);
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
                 reject(xmlhttp);
             }
         };
@@ -179,8 +152,8 @@ async function subscribeAdminAtCommunity(redditToken, community) {
 
 async function getCommunitiesByName(redditToken, searchInput) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
-        var theUrl = `https://oauth.reddit.com/subreddits/search?q=${searchInput}&limit=100`; ////${filterType}
+        var xmlhttp = new XMLHttpRequest();
+        var theUrl = `https://oauth.reddit.com/subreddits/search?q=${searchInput}&limit=100`;
         xmlhttp.open("GET", theUrl);
         xmlhttp.setRequestHeader(
             "Content-Type",
@@ -191,17 +164,12 @@ async function getCommunitiesByName(redditToken, searchInput) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     const response = JSON.parse(xmlhttp.responseText);
                     resolve(response.data.children);
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
                 reject(xmlhttp);
             }
         };

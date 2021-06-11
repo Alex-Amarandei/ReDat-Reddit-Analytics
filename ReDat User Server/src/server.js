@@ -1,10 +1,8 @@
-const { resolve4 } = require("dns");
 const http = require("http");
 const qs = require("querystring");
 const url = require("url");
 
 const Users = require("./src/users");
-
 const port = 3030;
 
 const server = http.createServer((req, res) => {
@@ -20,7 +18,7 @@ const server = http.createServer((req, res) => {
     } else if (req.method === "POST") {
         return handlePostReq(req, res);
     } else if (req.method === "DELETE") {
-        return handleDeleteReq(req, res);
+        return res.end("DELETE");
     } else if (req.method === "PUT") {
         return handlePutReq(req, res);
     } else if (req.method === "OPTIONS") {
@@ -28,7 +26,6 @@ const server = http.createServer((req, res) => {
     }
 });
 
-// GET
 async function handleGetReq(req, res) {
     const { pathname, query } = url.parse(req.url);
 
@@ -95,16 +92,17 @@ async function handleGetReq(req, res) {
         res.statusCode = 200;
         return res.end();
     } catch (err) {
-        console.log("aici");
-        res.statusCode = err.statusCode;
-        res.end(JSON.stringify({ message: err.message }));
+        if (!Object.keys(http.STATUS_CODES).includes(err.statusCode)) {
+            res.statusCode = 500;
+            res.end(JSON.stringify({ message: "Internal server error" }));
+        } else {
+            res.statusCode = err.statusCode;
+            res.end(JSON.stringify({ message: err.message }));
+        }
     }
 }
 
-// POST
 async function handlePostReq(req, res) {
-    /// REGISTER
-
     const size = parseInt(req.headers["content-length"], 10);
     const buffer = Buffer.allocUnsafe(size);
     var pos = 0;
@@ -190,7 +188,9 @@ async function handlePostReq(req, res) {
                         res.setHeader("Content-Type", "*/*");
                         res.statusCode = 200;
                         res.end(
-                            JSON.stringify({ registerMessage: "User successfully created" })
+                            JSON.stringify({
+                                registerMessage: "User successfully created",
+                            })
                         );
                     } else {
                         throw { statusCode: 500, message: "Internal server error" };
@@ -205,12 +205,13 @@ async function handlePostReq(req, res) {
                         data.field,
                         data.newValue
                     );
-                    console.log(responseUpdate);
                     if (responseUpdate) {
                         res.setHeader("Content-Type", "*/*");
                         res.statusCode = 200;
                         res.end(
-                            JSON.stringify({ editingMessage: "User successfully updated" })
+                            JSON.stringify({
+                                editingMessage: "User successfully updated",
+                            })
                         );
                     } else {
                         throw { statusCode: 500, message: "Internal server error" };
@@ -225,40 +226,32 @@ async function handlePostReq(req, res) {
                         res.setHeader("Content-Type", "*/*");
                         res.statusCode = 200;
                         res.end(
-                            JSON.stringify({ deletingMessage: "User successfully deleted" })
+                            JSON.stringify({
+                                deletingMessage: "User successfully deleted",
+                            })
                         );
                     } else {
                         throw { statusCode: 500, message: "Internal server error" };
                     }
                 }
             } catch (err) {
-                res.setHeader("Content-Type", "*/*");
-                res.statusCode = err.statusCode;
-                res.end(JSON.stringify(err.message));
+                if (!Object.keys(http.STATUS_CODES).includes(err.statusCode)) {
+                    res.statusCode = 500;
+                    res.end(JSON.stringify("Internal server error"));
+                } else {
+                    res.statusCode = err.statusCode;
+                    res.end(JSON.stringify(err.message));
+                }
             }
         });
 }
 
-// DELETE
-function handleDeleteReq(req, res) {
-    const { pathname, query } = url.parse(req.url);
-    if (pathname !== "/user") {
-        return handleError(res, 404);
-    }
-    const { id } = qs.parse(query);
-
-    res.setHeader("Content-Type", "application/json;charset=utf-8");
-    res.end(`{"userDeleted": ${id}}`);
-}
-
-// PUT
 function handlePutReq(req, res) {
-    // LOGIN
-    const { pathname, query } = url.parse(req.url);
+    const { pathname } = url.parse(req.url);
     if (pathname !== "/user") {
         return handleError(res, 404);
     }
-    const { id } = qs.parse(query);
+
     const size = parseInt(req.headers["content-length"], 10);
     const buffer = Buffer.allocUnsafe(size);
     var pos = 0;
@@ -280,9 +273,9 @@ function handlePutReq(req, res) {
 
             try {
                 const responseObj = {};
-                // GET DATA FROM BODY
+
                 const data = JSON.parse(buffer.toString());
-                // THIS IS THE EMAIL
+
                 const email = data.userName;
                 const password = data.password;
 
@@ -303,9 +296,8 @@ function handlePutReq(req, res) {
                 }
 
                 const foundUser = user[0];
-                console.log(foundUser);
+
                 if (foundUser.is_banned) {
-                    console.log("banned");
                     throw {
                         statusCode: 403,
                         errMessage: "You are banned",
@@ -328,10 +320,13 @@ function handlePutReq(req, res) {
                 res.statusCode = 200;
                 res.end();
             } catch (err) {
-                console.log(err.statusCode, err.meesage);
-                res.setHeader("Content-Type", "*/*");
-                res.statusCode = err.statusCode;
-                res.end(JSON.stringify({ errMessage: err.errMessage }));
+                if (!Object.keys(http.STATUS_CODES).includes(err.statusCode)) {
+                    res.statusCode = err.statusCode;
+                    res.end(JSON.stringify({ errMessage: err.errMessage }));
+                } else {
+                    res.statusCode = err.statusCode;
+                    res.end(JSON.stringify({ errMessage: err.message }));
+                }
             }
         });
 }

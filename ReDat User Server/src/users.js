@@ -3,7 +3,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 async function getRedditToken() {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var xmlhttp = new XMLHttpRequest();
         var theUrl = "https://www.reddit.com/api/v1/access_token";
         xmlhttp.open("POST", theUrl);
         xmlhttp.setRequestHeader(
@@ -15,21 +15,13 @@ async function getRedditToken() {
             "Basic b0lSQ21tOHJUTExpYlE6RkdaNmJVWi1MVGpiS0pnYlMzZzAycUUyejJzaEZB"
         );
         xmlhttp.send("grant_type=password&username=ioanapelinn&password=parola");
-        // grant_type: 'password',
-        // username: 'ioanapelinn',
-        // password: 'parola'
+
         xmlhttp.onreadystatechange = () => {
-            console.log(xmlhttp);
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 resolve(xmlhttp.responseText);
-
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
                 reject(xmlhttp);
             }
         };
@@ -53,7 +45,6 @@ async function getUserByEmail(userName) {
             if (err) {
                 reject(err);
             }
-            console.log(result);
             resolve(result);
         });
     });
@@ -149,24 +140,6 @@ async function saveUser(data) {
         });
     });
 }
-
-// function deleteUser(id) {
-//     const numberOfUsers = users.length
-//     users = users.filter(user => user.id != id);
-//     return users.length !== numberOfUsers
-// }
-
-// function replaceUser(id, user) {
-//     const foundUser = users.filter(usr => usr.id == id);
-//     if (foundUser.length === 0) return false
-//     users = users.map(usr => {
-//         if (id == usr.id) {
-//             usr = { id: usr.id, ...user };
-//         }
-//         return usr
-//     })
-//     return true
-// }
 
 const Users = function() {};
 

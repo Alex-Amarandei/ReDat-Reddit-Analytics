@@ -1,20 +1,16 @@
-var con = require('./db');
-
-
+var con = require("./db");
 
 async function getUsers() {
     return new Promise((resolve, reject) => {
-        const retrieveUsersSql = "SELECT * FROM users";
+        const retrieveUsersSql = "SELECT * FROM users WHERE is_admin = 0";
 
         con.query(retrieveUsersSql, (err, result) => {
             if (err) {
                 reject(err);
             }
             resolve(result);
-        })
-
-    })
-
+        });
+    });
 }
 
 async function banUser(userId) {
@@ -26,16 +22,27 @@ async function banUser(userId) {
                 reject(err);
             }
             resolve(result);
-        })
-
-    })
-
+        });
+    });
 }
 
-const Admin = function() {}
+async function grantUser(userId) {
+    return new Promise((resolve, reject) => {
+        const retrieveUsersSql = "UPDATE users SET is_banned = 0 WHERE id = ?";
 
-Admin.prototype.getUsers = getUsers
-Admin.prototype.banUser = banUser
+        con.query(retrieveUsersSql, [userId], (err, result) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(result);
+        });
+    });
+}
 
+const Admin = function() {};
 
-module.exports = new Admin()
+Admin.prototype.grantUser = grantUser;
+Admin.prototype.getUsers = getUsers;
+Admin.prototype.banUser = banUser;
+
+module.exports = new Admin();

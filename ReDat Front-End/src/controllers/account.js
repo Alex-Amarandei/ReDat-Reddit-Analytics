@@ -16,11 +16,8 @@ function deleteAccount() {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     const res = JSON.parse(xmlhttp.response);
                     if (res.deletingMessage === "User successfully deleted") {
                         localStorage.clear();
@@ -31,7 +28,6 @@ function deleteAccount() {
                         window.location.assign(new_path);
                     }
                 } else {
-                    // What to do when the request has failed
                     alert("Your account couldn't be deleted!");
                 }
             }
@@ -96,7 +92,6 @@ async function disable(element) {
             break;
         case "old-password":
             if (await oldPasswordIsCorrect(parent.childNodes[1].value)) {
-                console.log("here");
                 if (isValid("new-password")) {
                     updateInformation("new-password", parent.childNodes[3].value);
                     setInvisible(elementId, root);
@@ -132,7 +127,7 @@ async function disable(element) {
 
 function emailNotUsed(email) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var xmlhttp = new XMLHttpRequest();
         var theUrl = `http://localhost:3030/verify/email/unique?id=${localStorage.getItem(
       "token"
     )}&info=${email}`;
@@ -142,11 +137,8 @@ function emailNotUsed(email) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     let res = JSON.parse(xmlhttp.responseText);
                     if (res.message !== "Email already exists!") {
                         resolve(true);
@@ -155,8 +147,6 @@ function emailNotUsed(email) {
                     }
                 }
             } else {
-                // What to do when the request has failed
-                console.log("error", xmlhttp);
                 reject(false);
             }
         };
@@ -165,7 +155,7 @@ function emailNotUsed(email) {
 
 function oldPasswordIsCorrect(password) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var xmlhttp = new XMLHttpRequest();
         var theUrl = `http://localhost:3030/verify/password?id=${localStorage.getItem(
       "token"
     )}&info=${password}`;
@@ -175,11 +165,8 @@ function oldPasswordIsCorrect(password) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     let res = JSON.parse(xmlhttp.responseText);
                     if (res.message === "Same password") {
                         resolve(true);
@@ -188,8 +175,6 @@ function oldPasswordIsCorrect(password) {
                     }
                 }
             } else {
-                // What to do when the request has failed
-                console.log("error", xmlhttp);
                 reject(false);
             }
         };
@@ -234,18 +219,13 @@ function updateInformation(id, value) {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 const res = JSON.parse(xmlhttp.response);
                 if (res.editingMessage.length) {
                     alert(`Your ${dbField} was succesfully updated!`);
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
                 console.log("error", xmlhttp);
             }
         }
@@ -347,7 +327,7 @@ function logoutUser() {
 }
 
 (() => {
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+    var xmlhttp = new XMLHttpRequest();
     var theUrl = `http://localhost:3030/my/information?id=${localStorage.getItem(
     "token"
   )}`;
@@ -357,26 +337,21 @@ function logoutUser() {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 let res = JSON.parse(xmlhttp.responseText);
-                console.log("here" + res);
 
                 let firstName = document.getElementById("first-name");
                 let lastName = document.getElementById("last-name");
                 let userName = document.getElementById("user-name");
                 let email = document.getElementById("email");
-
+                console.log(firstName);
                 firstName.value = res.first_name;
                 lastName.value = res.last_name;
                 userName.value = res.username;
                 email.value = res.email;
             }
         } else {
-            // What to do when the request has failed
             console.log("error", xmlhttp);
         }
     };
@@ -390,7 +365,5 @@ function logoutUser() {
         var path = str.substring(0, lastIndex);
         var new_path = path + "/login.html";
         window.location.assign(new_path);
-    } else {
-        console.log("are token");
     }
 })();

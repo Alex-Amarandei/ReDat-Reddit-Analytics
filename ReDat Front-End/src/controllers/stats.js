@@ -17,6 +17,13 @@ function generateStats() {
 }
 
 function getStats(community, dataType, timeframe, chartType) {
+    setTimeout(() => {
+        const doc = document.getElementById("loader");
+        doc.style.opacity = 10;
+        doc.style.zIndex = 10;
+        document.getElementById("post-wrapper").style.opacity = -10;
+    });
+
     var xmlhttp = new XMLHttpRequest();
     var url = `http://localhost:3033/${dataType}/${timeframe}/?id=${community}`;
 
@@ -32,10 +39,17 @@ function getStats(community, dataType, timeframe, chartType) {
                 localStorage.setItem("valuesForStats", res);
 
                 chartSelected(timeframe, chartType);
-                // exportToCSV(values, community, dataType, timeframe);
-                console.log(timeframe, chartType);
+
+                const doc = document.getElementById("loader");
+                doc.style.opacity = -10;
+                doc.style.zIndex = -10;
+                document.getElementById("post-wrapper").style.opacity = 10;
             }
         } else {
+            const doc = document.getElementById("loader");
+            doc.style.opacity = -10;
+            doc.style.zIndex = -10;
+            document.getElementById("post-wrapper").style.opacity = 10;
             document.getElementById("generate-button").innerHTML =
                 "The Pushshift API is currently unavailable, please try again in a minute.";
             setTimeout(() => {
@@ -75,15 +89,12 @@ function chartSelected(timeframe, chartType) {
         .map((res) => {
             return Number(res);
         });
-    console.log(values);
 
     let svgCanvas = document.getElementById("canvas");
     svgCanvas.innerHTML = "";
     try {
         svgCanvas.setAttribute("viewbox", "0 0 100% 100%");
-    } catch (err) {
-        //ignore
-    }
+    } catch (err) {}
     const maximum = Math.max(...values);
 
     drawCanvas();
@@ -318,8 +329,6 @@ function exportToCSV() {
         else text += `${i * 2}-${(i + 1) * 2},`;
         text += `${values[i]}\n`;
     }
-
-    console.log(text);
 
     if (timeframe == "minutes") interval = "last hour";
     else if (timeframe == "hours") interval = "last six hours";

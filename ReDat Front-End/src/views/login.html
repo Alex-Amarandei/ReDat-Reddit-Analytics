@@ -39,31 +39,31 @@
                     <h1>Sign Up</h1>
 
                     <div class="name-wrapper">
-                        <input type="text" placeholder="First Name" name="first-name" required/>
-                        <input type="text" placeholder="Last Name" name="last-name" required/>
+                        <input type="text" id="first-name" placeholder="First Name" name="first-name" required/>
+                        <input type="text" id="last-name" placeholder="Last Name" name="last-name" required/>
                     </div>
 
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">email</span>
-                        <input type="email" placeholder="Email" required name="email" />
+                        <input type="email" id="email" placeholder="Email" required name="email" />
                     </div>
 
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">account_circle</span>
-                        <input type="username" placeholder="Username" name="user-name" required/>
+                        <input type="username" id="username" placeholder="Username" name="user-name" required/>
                     </div>
 
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">lock</span>
-                        <input type="password" placeholder="Password" name="password" required/>
+                        <input type="password" id="password" placeholder="Password" name="password" required/>
                     </div>
 
                     <div class="input-wrapper">
                         <span class="material-icons-outlined">lock</span>
-                        <input type="password" placeholder="Confirm Password" name="confirm" required/>
+                        <input type="password" id="confirm" placeholder="Confirm Password" name="confirm" required/>
                     </div>
 
-                    <button onclick="return isValidRegister()" class="button solid">Sign Up</button>
+                    <button onclick="return isValidRegister()" id="submit-button-register" class="button solid">Sign Up</button>
                 </form>
             </div>
 

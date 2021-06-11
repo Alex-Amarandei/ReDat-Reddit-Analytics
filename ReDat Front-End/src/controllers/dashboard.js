@@ -3,7 +3,6 @@ function deleteNotification(element) {
 }
 
 function expandCard(element) {
-    console.log(element);
     element.scroll = (e) => {
         element.stopPropagation();
     };
@@ -49,7 +48,6 @@ function switchMode() {
         postWrapper.style.display = "none";
         statsWrapper.style.display = "flex";
 
-        /////
         if (document.getElementById("allReddit").checked == true)
             document.getElementById("allReddit").checked = false;
         if (document.getElementById("yourCommunities").checked == true)
@@ -93,7 +91,6 @@ function switchMode() {
         for (let i = 0; i < myCommunities.children.length; i++) {
             myCommunities.children[i].style.backgroundColor = "unset";
         }
-        //////// du te la all communities
         location.reload();
     }
 }
@@ -113,7 +110,6 @@ function manageClickOnCommunity(element, communityName) {
         }
 
         localStorage.setItem("subreddit", communityName);
-        /////////bagam stats
     } else {
         localStorage.setItem("communities", "");
 
@@ -158,7 +154,7 @@ function manageClickOnCommunity(element, communityName) {
         }
 
         var filterType = localStorage.getItem("filter");
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var xmlhttp = new XMLHttpRequest();
         var theUrl = `http://localhost:3031/selected/your/communities?id=${localStorage.getItem(
       "token"
     )}&redditToken=${localStorage.getItem(
@@ -172,13 +168,9 @@ function manageClickOnCommunity(element, communityName) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     let res = JSON.parse(xmlhttp.responseText);
-                    console.log(res);
 
                     if (filterType == "new") {
                         res = res.sort((obj1, obj2) =>
@@ -213,7 +205,6 @@ function manageClickOnCommunity(element, communityName) {
                     });
 
                     var elements = document.getElementsByClassName("post");
-                    console.log(elements.length);
                     for (var i = 0; i < elements.length; i++) {
                         elements[i].addEventListener("click", function() {
                             expandCard(this);
@@ -223,13 +214,11 @@ function manageClickOnCommunity(element, communityName) {
                     doc.style.opacity = -10;
                     doc.style.zIndex = -10;
                     document.getElementById("post-wrapper").style.opacity = 10;
-                    // console.log('success', JSON.parse(xmlhttp.responseText));
                 } else {
                     const doc = document.getElementById("loader");
                     doc.style.opacity = -10;
                     doc.style.zIndex = -10;
                     document.getElementById("post-wrapper").style.opacity = 10;
-                    // What to do when the request has failed
                     console.log("error", xmlhttp);
                 }
             }
@@ -278,7 +267,7 @@ function showPostsBySubject(element, subject) {
     }
 
     var filterType = localStorage.getItem("filter");
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+    var xmlhttp = new XMLHttpRequest();
     var theUrl = `http://localhost:3031/selected/your/subjects?id=${localStorage.getItem(
     "token"
   )}&redditToken=${localStorage.getItem(
@@ -290,13 +279,9 @@ function showPostsBySubject(element, subject) {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 let res = JSON.parse(xmlhttp.responseText);
-                console.log(res);
 
                 if (filterType == "new")
                     res = res.sort((obj1, obj2) =>
@@ -331,7 +316,6 @@ function showPostsBySubject(element, subject) {
                 });
 
                 var elements = document.getElementsByClassName("post");
-                console.log(elements.length);
                 for (var i = 0; i < elements.length; i++) {
                     elements[i].addEventListener("click", function() {
                         expandCard(this);
@@ -341,13 +325,11 @@ function showPostsBySubject(element, subject) {
                 doc.style.opacity = -10;
                 doc.style.zIndex = -10;
                 document.getElementById("post-wrapper").style.opacity = 10;
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
                 const doc = document.getElementById("loader");
                 doc.style.opacity = -10;
                 doc.style.zIndex = -10;
                 document.getElementById("post-wrapper").style.opacity = 10;
-                // What to do when the request has failed
                 console.log("error", xmlhttp);
             }
         }
@@ -357,17 +339,17 @@ function showPostsBySubject(element, subject) {
 function loadPostsByFilters(selectedCommunities, filterType) {
     localStorage.setItem("communitiesToShow", JSON.stringify([]));
     localStorage.setItem("subjectsToShow", JSON.stringify([]));
-
-    const doc = document.getElementById("loader");
-    doc.style.opacity = 10;
-    doc.style.zIndex = 10;
-    document.getElementById("post-wrapper").style.opacity = -10;
+    setTimeout(() => {
+        const doc = document.getElementById("loader");
+        doc.style.opacity = 10;
+        doc.style.zIndex = 10;
+        document.getElementById("post-wrapper").style.opacity = -10;
+    });
 
     localStorage.setItem("communities", selectedCommunities);
     localStorage.setItem("filter", filterType);
 
     if (localStorage.getItem("communities")) {
-        console.log("aaaaaaaaaaaa");
         var elements = document.getElementsByClassName("item-subject");
         for (var i = 0; i < elements.length; i++) {
             elements[i].style.backgroundColor = "unset";
@@ -380,7 +362,7 @@ function loadPostsByFilters(selectedCommunities, filterType) {
 
     switch (selectedCommunities) {
         case "all":
-            var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+            var xmlhttp = new XMLHttpRequest();
             var theUrl = `https://oauth.reddit.com/${filterType}.json?limit=100`;
             xmlhttp.open("GET", theUrl);
             xmlhttp.setRequestHeader(
@@ -395,14 +377,10 @@ function loadPostsByFilters(selectedCommunities, filterType) {
             xmlhttp.onreadystatechange = () => {
                 if (xmlhttp.readyState !== 4) return;
 
-                // Process our return data
                 if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                    // What do when the request is successful
                     if (xmlhttp.responseText) {
-                        // parse res body
                         const res = JSON.parse(xmlhttp.response);
                         const retrievedCommunities = res.data.children;
-                        console.log(retrievedCommunities);
 
                         const postWrapper = document.getElementById("post-wrapper");
                         postWrapper.innerHTML = " ";
@@ -429,7 +407,6 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                         });
 
                         var elements = document.getElementsByClassName("post");
-                        console.log(elements.length);
                         for (var i = 0; i < elements.length; i++) {
                             elements[i].addEventListener("click", function() {
                                 expandCard(this);
@@ -445,13 +422,12 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                     doc.style.opacity = -10;
                     doc.style.zIndex = -10;
                     document.getElementById("post-wrapper").style.opacity = 10;
-                    console.log("error", xmlhttp);
                 }
             };
             break;
 
         case "your":
-            var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+            var xmlhttp = new XMLHttpRequest();
             var theUrl = `http://localhost:3031/all/your/communities?id=${localStorage.getItem(
         "token"
       )}&redditToken=${localStorage.getItem(
@@ -463,25 +439,24 @@ function loadPostsByFilters(selectedCommunities, filterType) {
             xmlhttp.onreadystatechange = () => {
                 if (xmlhttp.readyState !== 4) return;
 
-                // Process our return data
                 if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                    // What do when the request is successful
                     if (xmlhttp.responseText) {
-                        // parse res body
                         let res = JSON.parse(xmlhttp.responseText);
 
                         res = res.sort((obj1, obj2) =>
                             new Date(obj1.createdAt) < new Date(obj2.createdAt) ? 1 : -1
                         );
-                        console.log(res[0].title, "aici eu mor");
-                        localStorage.setItem("lastUtc", res[0].createdAt.toString());
+                        if (res[0]) {
+                            localStorage.setItem("lastUtc", res[0].createdAt.toString());
+                        } else {
+                            localStorage.setItem("lastUtc", "0");
+                        }
 
                         if (filterType == "hot") {
                             res = res.sort(
                                 (obj1, obj2) => parseFloat(obj1.score) > parseFloat(obj2.score)
                             );
                         }
-                        console.log(res);
                         const postWrapper = document.getElementById("post-wrapper");
                         postWrapper.innerHTML = " ";
                         res.forEach((post) => {
@@ -507,7 +482,6 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                         });
 
                         var elements = document.getElementsByClassName("post");
-                        console.log(elements.length);
                         for (var i = 0; i < elements.length; i++) {
                             elements[i].addEventListener("click", function() {
                                 expandCard(this);
@@ -517,13 +491,11 @@ function loadPostsByFilters(selectedCommunities, filterType) {
                         doc.style.opacity = -10;
                         doc.style.zIndex = -10;
                         document.getElementById("post-wrapper").style.opacity = 10;
-                        // console.log('success', JSON.parse(xmlhttp.responseText));
                     } else {
                         const doc = document.getElementById("loader");
                         doc.style.opacity = -10;
                         doc.style.zIndex = -10;
                         document.getElementById("post-wrapper").style.opacity = 10;
-                        // What to do when the request has failed
                         console.log("error", xmlhttp);
                     }
                 }
@@ -547,18 +519,13 @@ function subscribeAdminAtCommunity(communityName) {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 const res = JSON.parse(xmlhttp.response);
                 if (res.message === "Subscription was successfully made!") {
                     alert(`Your subscription was succesfully made!`);
                 }
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
-                // What to do when the request has failed
                 console.log("error", xmlhttp);
             }
         }
@@ -567,7 +534,7 @@ function subscribeAdminAtCommunity(communityName) {
 
 async function adminIsSubscribedAtCommunity(communityName) {
     return new Promise((resolve, reject) => {
-        var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+        var xmlhttp = new XMLHttpRequest();
         var theUrl = `http://localhost:3031/admin/subscribed/at/community?id=${localStorage.getItem(
       "token"
     )}&redditToken=${localStorage.getItem(
@@ -579,11 +546,8 @@ async function adminIsSubscribedAtCommunity(communityName) {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState !== 4) return;
 
-            // Process our return data
             if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                // What do when the request is successful
                 if (xmlhttp.responseText) {
-                    // parse res body
                     let res = JSON.parse(xmlhttp.responseText);
                     if (res.message === "Already subscribed") {
                         resolve(true);
@@ -592,7 +556,6 @@ async function adminIsSubscribedAtCommunity(communityName) {
                     }
                 }
             } else {
-                // What to do when the request has failed
                 console.log("error", xmlhttp);
                 reject(false);
             }
@@ -614,16 +577,11 @@ async function addCommunityToUser(communityName) {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 const res = JSON.parse(xmlhttp.response);
                 if (res.message === "Community was successfully added!") {}
-                console.log("success");
             } else {
-                // What to do when the request has failed
                 console.log("error", xmlhttp);
             }
         }
@@ -634,10 +592,8 @@ async function manageCommunity(element) {
     let label = element.innerHTML;
     const communityName =
         element.parentElement.parentElement.children[0].children[1].innerHTML;
-    console.log(label, "Asta e label");
     switch (label) {
         case "Join":
-            console.log("Am intrat in join");
             let alreadySubscribed = await adminIsSubscribedAtCommunity(communityName);
             if (!alreadySubscribed) subscribeAdminAtCommunity(communityName);
             addCommunityToUser(communityName);
@@ -646,7 +602,6 @@ async function manageCommunity(element) {
             break;
 
         case "Remove":
-            console.log("Am intrat in remove");
             var xmlhttp = new XMLHttpRequest();
             var theUrl = `http://localhost:3031/remove/community`;
             xmlhttp.open("POST", theUrl);
@@ -660,21 +615,15 @@ async function manageCommunity(element) {
             xmlhttp.onreadystatechange = () => {
                 if (xmlhttp.readyState !== 4) return;
 
-                // Process our return data
                 if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-                    // What do when the request is successful
                     if (xmlhttp.responseText) {
-                        // parse res body
                         const res = JSON.parse(xmlhttp.response);
                         if (res.removingMessage.length) {
-                            console.log(res.removingMessage);
                             alert(`Your community was successfully removed!`);
                             element.innerHTML = "Join";
                             refreshMyCommunities();
                         }
-                        // console.log('success', JSON.parse(xmlhttp.responseText));
                     } else {
-                        // What to do when the request has failed
                         console.log("error", xmlhttp);
                     }
                 }
@@ -699,9 +648,13 @@ function searchOnReddit() {
     if (document.getElementById("yourCommunities").checked == true)
         document.getElementById("yourCommunities").checked = false;
 
+    const doc = document.getElementById("loader");
+    doc.style.opacity = 10;
+    doc.style.zIndex = 10;
+    document.getElementById("post-wrapper").style.opacity = -10;
+
     const searchInput = document.forms["search-form"]["search"].value;
-    console.log(searchInput);
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+    var xmlhttp = new XMLHttpRequest();
     var theUrl = `http://localhost:3031/search/communities?id=${localStorage.getItem(
     "token"
   )}&redditToken=${localStorage.getItem(
@@ -713,11 +666,8 @@ function searchOnReddit() {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 let res = JSON.parse(xmlhttp.responseText);
 
                 res = res.sort();
@@ -805,7 +755,6 @@ function searchOnReddit() {
                 });
 
                 var elements = document.getElementsByClassName("post");
-                console.log(elements.length);
                 for (var i = 0; i < elements.length; i++) {
                     elements[i].addEventListener("click", function() {
                         expandCard(this);
@@ -815,13 +764,11 @@ function searchOnReddit() {
                 doc.style.opacity = -10;
                 doc.style.zIndex = -10;
                 document.getElementById("post-wrapper").style.opacity = 10;
-                // console.log('success', JSON.parse(xmlhttp.responseText));
             } else {
                 const doc = document.getElementById("loader");
                 doc.style.opacity = -10;
                 doc.style.zIndex = -10;
                 document.getElementById("post-wrapper").style.opacity = 10;
-                // What to do when the request has failed
                 console.log("error", xmlhttp);
             }
         }
@@ -837,14 +784,8 @@ function logoutUser() {
     window.location.assign(new_path);
 }
 
-(() => {})();
-
 window.onload = () => {
-    console.log("here");
-    console.log("are token");
-
     const token = localStorage.getItem("token");
-    console.log(token);
     if (!token) {
         var str = window.location.href;
         var lastIndex = str.lastIndexOf("/");
@@ -860,8 +801,7 @@ window.onload = () => {
 };
 
 function refreshMyCommunities() {
-    console.log("apel");
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+    var xmlhttp = new XMLHttpRequest();
     var theUrl = `http://localhost:3031/my-communities?id=${localStorage.getItem(
     "token"
   )}`;
@@ -871,13 +811,9 @@ function refreshMyCommunities() {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 let res = JSON.parse(xmlhttp.responseText);
-                console.log(res);
 
                 const communityWrapper = document.getElementById("communities-list");
                 communityWrapper.innerHTML = " ";
@@ -909,7 +845,6 @@ function refreshMyCommunities() {
                 document.getElementById("loader").style.zIndex = -10;
                 document.getElementById("post-wrapper").style.opacity = 10;
             } else {
-                // What to do when the request has failed
                 document.getElementById("loader").style.opacity = -10;
                 document.getElementById("loader").style.zIndex = -10;
                 document.getElementById("post-wrapper").style.opacity = 10;
@@ -920,7 +855,7 @@ function refreshMyCommunities() {
 }
 
 (() => {
-    localStorage.setItem("communities", "your"); ////
+    localStorage.setItem("communities", "your");
     localStorage.setItem("pageAction", "explore");
     localStorage.setItem("chartType", "line-chart");
     localStorage.setItem("subreddit", "");

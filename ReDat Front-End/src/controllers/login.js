@@ -62,8 +62,7 @@ async function isValidLogin() {
     const userName = document.forms["login-form"]["user"];
     const password = document.forms["login-form"]["login-password"];
 
-    // ========== XML HTTP REQUEST MODEL ========
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+    var xmlhttp = new XMLHttpRequest();
     var theUrl = "http://localhost:3030/user";
     xmlhttp.open("PUT", theUrl);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
@@ -75,18 +74,13 @@ async function isValidLogin() {
     );
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
-        console.log(xmlhttp.status);
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 const res = JSON.parse(xmlhttp.response);
 
-                // set local storage
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("redditToken", res.redditToken);
-                localStorage.setItem("communities", "your"); ////////
+                localStorage.setItem("communities", "your");
                 localStorage.setItem("filter", "new");
                 localStorage.setItem("pageAction", "explore");
                 var communitiesToShow = [];
@@ -97,8 +91,6 @@ async function isValidLogin() {
                 var subjectsToShow = [];
                 localStorage.setItem("subjectsToShow", JSON.stringify(subjectsToShow));
 
-                // RERUTARE in alta parte
-
                 if (!res.isAdmin) {
                     localStorage.setItem("isAdmin", false);
                     var str = window.location.href;
@@ -106,7 +98,6 @@ async function isValidLogin() {
                     var path = str.substring(0, lastIndex);
                     var new_path = path + "/dashboard.html";
 
-                    console.log(res);
                     window.location.assign(new_path);
                 } else {
                     localStorage.setItem("isAdmin", true);
@@ -114,10 +105,6 @@ async function isValidLogin() {
                     var lastIndex = str.lastIndexOf("/");
                     var path = str.substring(0, lastIndex);
                     var new_path = path + "/admin.html";
-                    window.setInterval(() => {
-                        console.log("Baga intervalu boss");
-                    }, 5000);
-                    console.log(res);
                     window.location.assign(new_path);
                 }
             }
@@ -202,7 +189,7 @@ async function isValidRegister() {
         return;
     }
 
-    var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
+    var xmlhttp = new XMLHttpRequest();
     var theUrl = "http://localhost:3030/user";
     xmlhttp.open("POST", theUrl);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
@@ -219,23 +206,77 @@ async function isValidRegister() {
     xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState !== 4) return;
 
-        // Process our return data
         if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
-            // What do when the request is successful
             if (xmlhttp.responseText) {
-                // parse res body
                 const res = JSON.parse(xmlhttp.response);
                 if (!!res.registerMessage.length) {
                     alert("Your account was succesfully created!");
                     setTimeout(() => {
                         document.getElementById("login-button").click();
                     }, 1000);
+
+                    let firstName = document.forms["signup-form"]["first-name"];
+                    let lastName = document.forms["signup-form"]["last-name"];
+                    let userName = document.forms["signup-form"]["user-name"];
+                    let password = document.forms["signup-form"]["password"];
+                    let confirm = document.forms["signup-form"]["confirm"];
+                    let email = document.forms["signup-form"]["email"];
+
+                    setTimeout(() => {
+                        firstName.value = "";
+                        firstName.placeholder = "First Name";
+
+                        lastName.value = "";
+                        lastName.placeholder = "Last Name";
+
+                        userName.value = "";
+                        userName.placeholder = "Username";
+
+                        password.value = "";
+                        password.placeholder = "Password";
+
+                        confirm.value = "";
+                        confirm.placeholder = "Confirm Password";
+
+                        email.value = "";
+                        email.placeholder = "Email";
+                        document.getElementById("submit-button-register").innerHTML =
+                            "Register";
+                    }, 500);
                 }
             }
-            // console.log('success', JSON.parse(xmlhttp.responseText));
         } else {
-            // What to do when the request has failed
-            console.log("error", xmlhttp);
+            let firstName = document.forms["signup-form"]["first-name"];
+            let lastName = document.forms["signup-form"]["last-name"];
+            let userName = document.forms["signup-form"]["user-name"];
+            let password = document.forms["signup-form"]["password"];
+            let confirm = document.forms["signup-form"]["confirm"];
+            let email = document.forms["signup-form"]["email"];
+
+            document.getElementById("submit-button-register").innerHTML =
+                "Email already exists!";
+
+            setTimeout(() => {
+                firstName.value = "";
+                firstName.placeholder = "First Name";
+
+                lastName.value = "";
+                lastName.placeholder = "Last Name";
+
+                userName.value = "";
+                userName.placeholder = "Username";
+
+                password.value = "";
+                password.placeholder = "Password";
+
+                confirm.value = "";
+                confirm.placeholder = "Confirm Password";
+
+                email.value = "";
+                email.placeholder = "Email";
+                document.getElementById("submit-button-register").innerHTML =
+                    "Register";
+            }, 2000);
         }
     };
 }

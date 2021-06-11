@@ -70,7 +70,7 @@
 
             <h3>1.3 Audiență și Sugestii de Citire</h3>
             <p>
-                Orice utilizator dornic de a afla cum se utilizează platforma ReDat, precum și alte date tehnice despre aceasta.
+                Orice utilizator dornic de a afla cum se utilizează platforma ReDat, precum și alte detalii tehnice și de implementare despre aceasta.
             </p>
 
             <p>
@@ -88,11 +88,12 @@
             <h3>1.4 Motivația Produsului</h3>
 
             <p>
-                ReDat (Reddit Data Monitoring) este o platformă destinată persoanelor ce doresc să afle mai multe informații și statistici referitoare la subiectele lor de interes, precum și la comunitățile preferate de aceștia.
+                ReDat (Reddit Data Monitoring) este o platformă destinată persoanelor ce doresc să exploreze în același timp postări de pe multiple comunități, să vizualize și să genereze statistici referitoare la o comunitate individuală, precum și să fie notificați
+                când apar noutăți.
             </p>
 
             <p>
-                Platforma dorește să pună la dispoziția utilizatorilor un set de instrumente puternice ce pot fi folosite gratuit, într-un mod ușor și intuitiv.
+                Platforma dorește să pună la dispoziția utilizatorilor un set de instrumente puternice și versatile ce pot fi folosite gratuit, într-un mod ușor și intuitiv.
             </p>
 
             <h3>1.5 Referințe</h3>
@@ -100,6 +101,12 @@
             <ul>
                 <li>Repozitoriu GitHub al codului platformei: <a href="https://github.com/Alex-Amarandei/ProiectWeb"> ReDat - GitHub</a>
                 </li>
+
+                <li>API-ul public Reddit:
+                    <a href="https://www.reddit.com/dev/api/"> Reddit Dev API</a> </li>
+
+                <li>API-ul public Pushshift:
+                    <a href="https://github.com/pushshift/api"> Pushshift Reddit API</a> </li>
 
                 <li>Repozitoriu GitHub al modelului IEEE-SRS: <a href="https://github.com/rick4470/IEEE-SRS-Tempate">IEEE-SRS - GitHub</a>
                 </li>
@@ -115,12 +122,18 @@
             <h3>2.1 Perspectiva Produsului</h3>
 
             <p>
-                Ideea din spatele platformei ReDat își are rădăcinile în pasiunea pentru analiză și statistică a creatorilor săi, dar și din observarea necesității unei astfel de unelte.
+                Ideea din spatele platformei ReDat își are rădăcinile în pasiunea pentru Reddit, analiză și statistică a creatorilor săi, dar și din observarea necesității unei platforme care agregă diferite unelte folositoare pentru aceste scopuri.
             </p>
 
             <p>
-                În momentul actual există o singură versiune a platformei ce funcționează folosindu-se de API-ul public oferit de Reddit.
+                În momentul actual există o singură versiune a platformei, ce funcționează folosindu-se de două API-uri publice, anume:
             </p>
+
+            <ol>
+                <li>API-ul public oferit de Reddit pentru vizualizarea, căutarea și sortarea postărilor, precum și pentru gruparea acestora după subiecte.</li>
+
+                <li>API-ul public oferit de Pushshift pentru generarea statisticilor legate de comentariile și postările făcute pe o anumită comunitate într-un anumit interval de timp.</li>
+            </ol>
 
             <h3>2.2 Funcționalitățile Produsului</h3>
 
@@ -162,7 +175,15 @@
                 </li>
 
                 <li>
-                    Eliminarea de subiecte sau comunități din lista de urmăriri
+                    Eliminarea de subiecte sau comunități din lista de urmăriri prin căutarea acestora
+                </li>
+            </ul>
+
+            <h4>Notificare:</h4>
+
+            <ul>
+                <li>
+                    Dacă sunt permise notificările de către utilizator, platforma va trimite notificaări în cadrul browser-ului web când apar noi postări pe comunitățile urmărite
                 </li>
             </ul>
 
@@ -170,19 +191,23 @@
 
             <ul>
                 <li>
-                    Alegerea data set-ului (subiecte sau comunități vizate) din lista de urmăriri
+                    Alegerea unei comunități din lista de urmăriri pentru obținerea de statistici referitoare la aceasta
                 </li>
 
                 <li>
-                    Alegerea etichetelor axelor X, respectiv Y
+                    Alegerea tipului de acțiune pentru care se dorește generarea de statistici dintre comentarii și submisii
                 </li>
 
                 <li>
-                    Alegerea modului de vizualizare a graficului
+                    Alegerea intervalului de timp pentru care se dorește generarea de statistici dintre ultima oră, ultimele șase ore și ultimele douăsprezece ore
                 </li>
 
                 <li>
-                    Exportarea statisticilor obținute în format CSV sau SVG
+                    Alegerea modului de vizualizare a graficului dintre line-chart, bar-chart și column-chart
+                </li>
+
+                <li>
+                    Exportarea statisticilor obținute în format SVG sau CSV
                 </li>
             </ul>
 
@@ -205,6 +230,14 @@
             <ul>
                 <li>
                     Delogarea utilizatorului de pe platformă
+                </li>
+            </ul>
+
+            <h4>Administrare:</h4>
+
+            <ul>
+                <li>
+                    Gestionarea conturilor de pe platformă prin blocarea / deblocarea utilizatorilor
                 </li>
             </ul>
 
@@ -236,15 +269,33 @@
                 Programatori ce doresc îmbunătățirea facilităților oferite de platformă, precum și adăugarea de noi funcționalități sau depistarea unor probleme ascunse. Aceștia folosesc platforma doar în scop de testare și pe scenarii bine-definite.
             </p>
 
+            <h4>
+                Administrator:
+            </h4>
+
+            <p>
+                Administratorul platformei ce are drept de blocare / deblocare a utilizatorilor.
+            </p>
+
             <h3>2.4 Mediu de Operare</h3>
 
             <p>
-                Platforma ReDat poate fi accesată prin intermediul oricărui browser web de pe orice tip de dispozitiv ce poate fi conectat la Internet.
+                Platforma ReDat poate fi accesată prin intermediul oricărui browser web de pe orice tip de dispozitiv ce poate fi conectat la Internet, aceasta fiind optimizată pentru device-uri de tip Desktop.
             </p>
 
-            <h3>2.5 Constrângeri de Aspect și Implementare</h3>
+            <h3>2.5 Aspect și Implementare</h3>
 
-            <p>Platforma ReDat este dezvoltată folosind cele mai recente standarde HTML5, CSS3. Ar fi de preferat ca browser-ul web să fie compatibil cu cele mai recente versiuni ale acestora.</p>
+            <ul>
+                <li>Platforma ReDat este dezvoltată folosind cele mai recente standarde HTML5, CSS3. Ar fi de preferat ca browser-ul web să fie compatibil cu cele mai recente versiuni ale acestora.</li>
+
+                <li>
+                    Platforma ReDat este implementată sub MVP, folosind fișiere Javascript dedicate pentru fiecare view, utilizatorul neinteracționând direct cu modelul (baza de date).
+                </li>
+
+                <li>Suita de tehnologii AJAX a fost folosită pentru asigurarea comunicării cu server-ul, baza de date și API-urile publice.</li>
+
+                <li>Pentru gestionarea bazei de date a fost folosit MySQL.</li>
+            </ul>
 
             <h3>2.6 Documentația Utilizatorului</h3>
 
@@ -264,7 +315,7 @@
 
             <ul>
                 <li>
-                    Urmărirea postărilor celor mai recente sau celor mai populare pe unul sau mai multe subiecte se face prin selectarea subiectelor aferente din meniul “Your Subjects”.
+                    Urmărirea postărilor celor mai recente sau celor mai populare pe unul sau mai multe subiecte se face prin selectarea subiectelor aferente din meniul Popular Subjects”.
                 </li>
 
                 <li>
@@ -272,11 +323,11 @@
                 </li>
 
                 <li>
-                    Alegerea sursei postărilor, fie din subiectele sau comunitățile urmărite, fie la nivelul întregii platforme Reddit, se face selectând unul dintre cele două butoane din partea de sus a paginii.
+                    Alegerea sursei postărilor, fie din subiectele populare sau comunitățile urmărite, fie la nivelul întregii platforme Reddit, se face selectând unul dintre cele două butoane din partea de sus a paginii.
                 </li>
 
                 <li>
-                    Primirea de notificări privind activitatea comunităților din lista de urmăriri se face automat, notificările fiind adăugate în secțiunea de notificări aflată în partea dreaptă a paginii.
+                    Primirea de notificări privind activitatea comunităților din lista de urmăriri se face automat, notificările fiind trimise de către browser-ul web.
                 </li>
             </ul>
 
@@ -284,11 +335,7 @@
 
             <ul>
                 <li>
-                    Adăugarea de subiecte sau comunități se face prin căutarea acestora în bara de căutare.
-                </li>
-
-                <li>
-                    Eliminarea de subiecte sau comunități din lista de urmăriri se face prin selectarea câmpului respectiv și apoi a comenzii remove.
+                    Adăugarea de subiecte sau comunități se face prin căutarea acestora în bara de căutare și apăsarea butonului Join / Remove pentru a adăuga / elimina o comunitate din lista de urmăriri.
                 </li>
             </ul>
 
@@ -300,11 +347,7 @@
                 </li>
 
                 <li>
-                    Alegerea data set-ului (subiecte sau comunități vizate) din lista de urmăriri se face prin selectarea acestora din bara din stânga.
-                </li>
-
-                <li>
-                    Alegerea etichetelor axelor X, respectiv Y, se face prin glisarea cursorului deasupra butoanelor X-Axis, Y-Axis și selectarea etichetei dorite.
+                    Alegerea data set-ului (comunitate, acțiune, interval de timp vizate) din lista de urmăriri se face prin selectarea acestora din bara din stânga și bara de control.
                 </li>
 
                 <li>
@@ -312,7 +355,7 @@
                 </li>
 
                 <li>
-                    Exportarea statisticilor obținute în format CSV sau SVG se face prin apăsarea butonului Export din bara de selecție.
+                    Exportarea statisticilor obținute în format SVG sau CSV se face prin apăsarea butonului Export din bara de selecție și selectarea opțiunii dorite din meniul dropdown.
                 </li>
             </ul>
             <h4>
@@ -343,13 +386,27 @@
                 </li>
             </ul>
 
+            <h4>
+                Blocare / Deblocare cont:
+            </h4>
+
+            <ul>
+                <li>
+                    În cazul detectării unui comportament fraudulos, administratorul platformei poate bloca un utilizator și accesul acestuia pe website.
+                </li>
+
+                <li>
+                    Deblocarea se face din același meniu al administratorului paginii.
+                </li>
+            </ul>
+
             <h3>2.7 Ipoteze și Dependențe</h3>
             <p>
                 Platforma ReDat poate fi accesată doar prin intermediul unui browser web conectat la Internet. Se presupune că utilizatorul este competent în accesarea site-urilor web.
             </p>
             <p>
-                Postările și datele peste care se vor realiza statisticile sunt preluate de pe platofrma Reddit, prin intermediul API-ului public oferit de aceasta. În cazul ștergerii platformei Reddit sau a eliminării posibilității de acces a API-ului acesteia, aplicația
-                nu va mai funcționa corespunzător.
+                Postările și datele peste care se vor realiza statisticile sunt preluate de pe platforma Reddit, prin intermediul API-ului public oferit de aceasta, dar și a API-ului public oferit de Pushshift. În cazul ștergerii platformei Reddit sau a eliminării posibilității
+                de acces a API-urilor acesteia, aplicația nu va mai funcționa corespunzător.
             </p>
         </section>
 
@@ -358,56 +415,56 @@
             <h3>3.1 Interfața Utilizatorului</h3>
 
             <figure typeof="sa:image">
-                <img src="login-page.png" alt="Login Page">
+                <img src="../images/login-page.png" alt="Login Page">
                 <figcaption>
                     Login Page (Website Landing Page)
                 </figcaption>
             </figure>
 
             <figure typeof="sa:image">
-                <img src="signup-page.png" alt="Sign-Up Page">
+                <img src="../images/signup-page.png" alt="Sign-Up Page">
                 <figcaption>
                     Sign-Up Page
                 </figcaption>
             </figure>
 
             <figure typeof="sa:image">
-                <img src="signup-browser-validation.png" alt="Sign-Up Browser Validation">
+                <img src="../images/signup-browser-validation.png" alt="Sign-Up Browser Validation">
                 <figcaption>
                     Sign-Up Browser Validation
                 </figcaption>
             </figure>
 
             <figure typeof="sa:image">
-                <img src="signup-app-validation.png" alt="Sign-Up Platform Validation">
+                <img src="../images/signup-app-validation.png" alt="Sign-Up Platform Validation">
                 <figcaption>
                     Sign-Up Platform Validation
                 </figcaption>
             </figure>
 
             <figure typeof="sa:image">
-                <img src="dashboard-page.png" alt="Dashboard Page">
+                <img src="../images/dashboard-page.png" alt="Dashboard Page">
                 <figcaption>
                     Dashboard Page
                 </figcaption>
             </figure>
 
             <figure typeof="sa:image">
-                <img src="dashboard-interaction.png" alt="Dashboard Page Interactions">
+                <img src="../images/dashboard-interaction.png" alt="Dashboard Page Interactions">
                 <figcaption>
                     Dashboard Page Interactions
                 </figcaption>
             </figure>
 
             <figure typeof="sa:image">
-                <img src="dashboard-statistics.png" alt="Dashboard Page Statistics">
+                <img src="../images/dashboard-statistics.png" alt="Dashboard Page Statistics">
                 <figcaption>
                     Dashboard Page Statistics
                 </figcaption>
             </figure>
 
             <figure typeof="sa:image">
-                <img src="account-page.png" alt="Account Page">
+                <img src="../images/account-page.png" alt="Account Page">
                 <figcaption>
                     Account Page
                 </figcaption>
@@ -419,11 +476,7 @@
             </p>
             <h3>3.3 Interfețe Software Platforma</h3>
             <p>
-                ReDat se folosește de API-ul public oferit de către Reddit pentru preluarea datelor și postărilor necesare pentru crearea de statistici relevante.
-            </p>
-            <h3>3.4 Interfețe de Comunicare</h3>
-            <p>
-                Se va folosi un serviciu automat de email pentru trimiterea codurilor de confirmare a identității utilizatorului, atât în cazul înregistrării, cât și în cazul uitării parolei.
+                ReDat se folosește de API-ul public oferit de către Reddit pentru preluarea postărilor și de API-ul public Pushshift pentru preluarea datelor necesare pentru crearea statisticilor.
             </p>
         </section>
 
@@ -432,7 +485,7 @@
             <h3>4. Diagrama</h3>
 
             <figure typeof="sa:image">
-                <img src="use-case.jpeg" alt="System Interaction">
+                <img src="../images/use-case.jpeg" alt="System Interaction">
                 <figcaption>
                     System Interaction Diagram
                 </figcaption>
@@ -442,17 +495,18 @@
         <section>
             <h2>Appendix: Glossary</h2>
             <ul>
+                <li>AJAX - Asynchronous JavaScript and XML</li>
                 <li>API - Application Programming Interface</li>
                 <li>CSS - Cascading Style Sheets</li>
                 <li> CSV - Comma Sepparated Values</li>
                 <li>HTML - HyperText Markup Language</li>
                 <li> IEEE - Institute of Electrical and Electronics Engineers</li>
+                <li> MVP - Model View Presenter</li>
                 <li>SRS - System Requirements Specification</li>
                 <li>SVG - Scalable Vector Graphics</li>
             </ul>
         </section>
     </article>
-    <script src="../controllers/utils.js"></script>
 </body>
 
 </html>
